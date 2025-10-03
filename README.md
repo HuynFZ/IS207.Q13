@@ -38,10 +38,10 @@
 | 1      | 23520641      | Nguyễn Văn Mạnh Huy    |[HuynFZ](https://github.com/HuynFZ)                        |23520641@gm.uit.edu.vn   |
 | 2      | 23521030      | Nguyễn Lê Bảo Ngọc     |[ngochoccode](https://github.com/ngochoccode)              |23521030@gm.uit.edu.vn   |
 | 3      | 23520698      | Nguyễn Thành Khang     |[Nguyen-Thanh-Khang](https://github.com/Nguyen-Thanh-Khang)|23520698@gm.uit.edu.vn   |
-| 4      | 23521434      | Lê Vĩnh Thái           |[inwinnieworld](https://github.com/inwinnieworld)          |23521417@gm.uit.edu.vn   |
-| 5      | 23521434      | Phạm Nhật Khoa         |[Khoa0216](https://github.com/Khoa0216)                    |23521434@gm.uit.edu.vn   |
-| 6      | 23521434      | Nguyễn Văn Nam         |[inwinnieworld](https://github.com/inwinnieworld)          |23521434@gm.uit.edu.vn   |
-| 7      | 23521434      | Ngô Tiến Sỹ            |[inwinnieworld](https://github.com/inwinnieworld)          |23521434@gm.uit.edu.vn   |
+| 4      | 23521434      | Lê Vĩnh Thái           |[VinhThaideptraia](https://github.com/VinhThaideptraia)    |23521417@gm.uit.edu.vn   |
+| 5      | 23521434      | Phạm Nhật Khoa         |[Khoa0216](https://github.com/Khoa0216)                    |23520753@gm.uit.edu.vn   |
+| 6      | 23521434      | Nguyễn Văn Nam         |[Sinister-VN](https://github.com/Sinister-VN)              |23520982@gm.uit.edu.vn   |
+| 7      | 23521434      | Ngô Tiến Sỹ            |[helios-ryuu](https://github.com/helios-ryuu)              |23521367@gm.uit.edu.vn   |
 
 ## SEMINAR
 <a name="seminar"></a>
