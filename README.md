@@ -1,54 +1,126 @@
-
 <p align="center">
-  <a href="https://www.uit.edu.vn/" title="Trường Đại học Công nghệ Thông tin" style="border: 5;">
+  <a href="https://www.uit.edu.vn/" title="Trường Đại học Công nghệ Thông tin">
     <img src="https://i.imgur.com/WmMnSRt.png" alt="Trường Đại học Công nghệ Thông tin | University of Information Technology">
   </a>
 </p>
-
-<!-- Title -->
 <h1 align="center"><b>IS207 - PHÁT TRIỂN ỨNG DỤNG WEB</b></h1>
 
-
-
 ## BẢNG MỤC LỤC
-* [ Giới thiệu môn học](#gioithieumonhoc)
-* [ Giảng viên hướng dẫn](#giangvien)
-* [ Thành viên nhóm](#thanhvien)
-* [ Seminar](#seminar)
-* [ Đồ án môn học](#doan)
+* [Giới thiệu môn học](#giới-thiệu-môn-học)
+* [Giới thiệu đồ án môn học](#giới-thiệu-đồ-án-môn-học)
+* [Seminar](#seminar)
+* [Thành viên nhóm](#thành-viên-nhóm)
+* [Cài đặt phần mềm](#cài-đặt-phần-mềm)
+* [Khởi chạy dự án](#khởi-chạy-dự-án)
+* [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 
 
 ## GIỚI THIỆU MÔN HỌC
-<a name="gioithieumonhoc"></a>
 * **Tên môn học**: Phát triển ứng dụng web - Web Application Development
 * **Mã môn học**: IS207
 * **Lớp học**: IS207.Q13
-* **Năm học**: 2025-2026
+* **Năm học**: HK1 2025-2026
+* **Giảng viên hướng dẫn:** ThS. **Tạ Việt Phương**
+* **Email:** *phuongtv@uit.edu.vn*
 
+---
 
-## GIẢNG VIÊN HƯỚNG DẪN
-<a name="giangvien"></a>
-* ThS. **Tạ Việt Phương** - *phuongtv@uit.edu.vn*
+## GIỚI THIỆU ĐỒ ÁN MÔN HỌC
+* **Đề tài đồ án nhóm:** Website Thương mại điện tử (C2C)
 
-
-## THÀNH VIÊN NHÓM
-<a name="thanhvien"></a>
-| STT    | MSSV          | Họ và Tên              | Github                                                    | Email                   |
-| ------ |:-------------:| ----------------------:|----------------------------------------------------------:|-------------------------:
-| 1      | 23520641      | Nguyễn Văn Mạnh Huy    |[HuynFZ](https://github.com/HuynFZ)                        |23520641@gm.uit.edu.vn   |
-| 2      | 23521030      | Nguyễn Lê Bảo Ngọc     |[ngochoccode](https://github.com/ngochoccode)              |23521030@gm.uit.edu.vn   |
-| 3      | 23520698      | Nguyễn Thành Khang     |[Nguyen-Thanh-Khang](https://github.com/Nguyen-Thanh-Khang)|23520698@gm.uit.edu.vn   |
-| 4      | 23521434      | Lê Vĩnh Thái           |[VinhThaideptraia](https://github.com/VinhThaideptraia)    |23521417@gm.uit.edu.vn   |
-| 5      | 23521434      | Phạm Nhật Khoa         |[Khoa0216](https://github.com/Khoa0216)                    |23520753@gm.uit.edu.vn   |
-| 6      | 23521434      | Nguyễn Văn Nam         |[Sinister-VN](https://github.com/Sinister-VN)              |23520982@gm.uit.edu.vn   |
-| 7      | 23521434      | Ngô Tiến Sỹ            |[helios-ryuu](https://github.com/helios-ryuu)              |23521367@gm.uit.edu.vn   |
+---
 
 ## SEMINAR
-<a name="seminar"></a>
-Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. Cần làm gì để cải thiện quảng bá, tăng tiếp cận trang web cả trên AI Search và SEO. Trình bày một số cách thực hiện, phương pháp bao gồm kỹ thuật và nội dung. 
+Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. Cần làm gì để cải thiện quảng bá, tăng tiếp cận trang web cả trên AI Search và SEO. Trình bày một số cách thực hiện, phương pháp bao gồm kỹ thuật và nội dung.
+
+---
+
+## THÀNH VIÊN NHÓM
+| STT |   MSSV   |           Họ và Tên |                                                      Github |                  Email |
+|-----|:--------:|--------------------:|------------------------------------------------------------:|-----------------------:|
+| 1   | 23520641 | Nguyễn Văn Mạnh Huy |                         [HuynFZ](https://github.com/HuynFZ) | 23520641@gm.uit.edu.vn |
+| 2   | 23521030 |  Nguyễn Lê Bảo Ngọc |               [ngochoccode](https://github.com/ngochoccode) | 23521030@gm.uit.edu.vn |
+| 3   | 23520698 |  Nguyễn Thành Khang | [Nguyen-Thanh-Khang](https://github.com/Nguyen-Thanh-Khang) | 23520698@gm.uit.edu.vn |
+| 4   | 23521434 |        Lê Vĩnh Thái |     [VinhThaideptraia](https://github.com/VinhThaideptraia) | 23521417@gm.uit.edu.vn |
+| 5   | 23521434 |      Phạm Nhật Khoa |                     [Khoa0216](https://github.com/Khoa0216) | 23520753@gm.uit.edu.vn |
+| 6   | 23521434 |      Nguyễn Văn Nam |               [Sinister-VN](https://github.com/Sinister-VN) | 23520982@gm.uit.edu.vn |
+| 7   | 23521434 |         Ngô Tiến Sỹ |               [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn |
+
+---
+
+## CÀI ĐẶT PHẦN MỀM
+- [X] [Docker và Docker Desktop](https://www.docker.com/)
+- [X] [Git](https://git-scm.com/)
+- [X] [PhpStorm](https://www.jetbrains.com/phpstorm/)
+
+---
+
+## KHỞI CHẠY DỰ ÁN
+> ⚠️ **Phải bật Docker Desktop trước khi chạy lệnh** ⚠️
+> 
+> CHỈ DÙNG CHO MỤC ĐÍCH KIỂM THỬ
+>
+> ⚠️ (Dành cho dev khi chạy code lần đầu): Khi clone về lần đầu, sẽ không có file .env tại thư mục backend vì lý do bảo mật. Các dev chạy lệnh dưới đây:
+> ```powershell
+> Copy-Item -Path "./backend/.env.docker.example" -Destination "./backend/.env.docker" -Force
+> ```
+> - Sau đó liên hệ với Ngô Tiến Sỹ | [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn để nhận ENV_KEY trong .env qua email
+> - Tại thư mục gốc của dự án:
+> ```powershell
+> docker compose up -d
+> ```
+- Truy cập giao diện người dùng: http://localhost:5173
+> Những lệnh khác
+> - Tắt web:
+> ```powershell
+> docker compose down
+> ```
+> - Tắt web và xóa volume
+> ```powershell
+> docker compose down -v
+> ```
 
 
-## ĐỒ ÁN MÔN HỌC
-<a name="doan"></a>
-Đồ án Nhóm: Website TMĐT C2C
+---
 
+## CÔNG NGHỆ SỬ DỤNG
+
+### Backend
+
+1. **Ngôn ngữ:** [PHP](https://www.php.net/)
+2. **Framework và công cụ:** [Laravel](https://laravel.com/)
+
+    * Tùy chọn thêm: [Laravel Sanctum](https://laravel.com/docs/10.x/sanctum), [Laravel Octane](https://laravel.com/docs/10.x/octane)
+
+### Frontend
+
+1. **Ngôn ngữ:** [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML), [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+2. **Framework và công cụ:**
+
+    * [Vite](https://vitejs.dev/)
+    * [React](https://react.dev/)
+
+### Database & Cache
+
+**Hệ quản trị cơ sở dữ liệu:** [MySQL](https://www.mysql.com/)
+
+### Deployment - Nền tảng triển khai
+
+1. **Triển khai Backend:** [Render](https://render.com/)
+2.  **Triển khai Frontend:** [Vercel](https://vercel.com/)
+3. **Triển khai Database (Dự kiến):** [ScaleGrid](https://scalegrid.io/)
+
+### CI/CD & DevOps
+
+1. **Công cụ chính:** [Docker](https://www.docker.com/)
+2. **Công cụ mở rộng (tùy chọn):**
+    * [GitHub Actions](https://docs.github.com/en/actions)
+    * [Kubernetes](https://kubernetes.io/)
+    * [Terraform](https://www.terraform.io/)
+    * [Prometheus](https://prometheus.io/)
+    * [Grafana](https://grafana.com/)
+
+### Testing
+
+1. **Backend testing:** [PHPUnit](https://phpunit.de/)
+2. **Frontend testing:** [Vitest](https://vitest.dev/)
