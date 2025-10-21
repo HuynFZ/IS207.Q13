@@ -1,0 +1,15 @@
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+/dist
+/build
+
+database
+setup.ps1
+Dockerfiles
