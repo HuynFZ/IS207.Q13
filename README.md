@@ -64,7 +64,7 @@ Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. C�
 > ```powershell
 > Copy-Item -Path "./backend/.env.docker.example" -Destination "./backend/.env.docker" -Force
 > ```
-> - Sau đó liên hệ với Ngô Tiến Sỹ | [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn để nhận ENV_KEY trong .env qua email
+> - Sau đó liên hệ với Ngô Tiến Sỹ | [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn để nhận APP_KEY trong .env qua email
 > - Tại thư mục gốc của dự án:
 > ```powershell
 > docker compose up -d
