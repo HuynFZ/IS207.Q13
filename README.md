@@ -62,7 +62,7 @@ Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. C�
 >
 > ⚠️ (Dành cho dev khi chạy code lần đầu): Khi clone về lần đầu, sẽ không có file .env tại thư mục backend vì lý do bảo mật. Các dev chạy lệnh dưới đây:
 > ```powershell
-> Copy-Item -Path "./backend/.env.docker.example" -Destination "./backend/.env.docker" -Force
+> Copy-Item -Path "./backend/.env.example" -Destination "./backend/.env" -Force
 > ```
 > - Sau đó liên hệ với Ngô Tiến Sỹ | [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn để nhận APP_KEY trong .env qua email
 > - Tại thư mục gốc của dự án:
