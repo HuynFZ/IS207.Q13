@@ -52,6 +52,47 @@ Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. C�
 - [X] [Docker và Docker Desktop](https://www.docker.com/)
 - [X] [Git](https://git-scm.com/)
 - [X] [PhpStorm](https://www.jetbrains.com/phpstorm/)
+- [X] [PHP](https://www.php.net/)
+- [X] [Composer](https://getcomposer.org/)
+
+### Hướng dẫn cài đặt PHP
+
+1. **Tải PHP phiên bản phù hợp**
+   - Truy cập [https://windows.php.net/download/](https://windows.php.net/download/)
+   - Tải phiên bản **PHP 8.4.14** (Non Thread Safe) - Zip file
+
+2. **Giải nén và di chuyển**
+   - Giải nén file zip vừa tải
+   - Đổi tên thành `php-8.4.14`
+   - Di chuyển thư mục PHP vào ổ C: `C:\php-8.4.14`
+
+3. **Cấu hình biến môi trường**
+   - Mở **View advance system setting** → **Environment Variables...**
+   - Chọn Path trên khung User variables và nhấn **Edit...**
+   - Click **New**
+   - Thêm `C:\php-8.4.14`
+   - Click **OK** để lưu
+
+4. **Kiểm tra cài đặt PHP**
+   ```cmd
+   php -v
+   ```
+
+### Hướng dẫn cài đặt Composer
+
+1. **Tải Composer**
+   - Truy cập [https://getcomposer.org/download/](https://getcomposer.org/download/)
+   - Tải **Composer-Setup.exe**
+
+2. **Chạy trình cài đặt**
+   - Chạy file **Composer-Setup.exe**
+   - Chọn đúng đường dẫn PHP (`C:\php-8.4.14\php.exe`)
+   - Hoàn tất cài đặt
+
+3. **Kiểm tra cài đặt Composer**
+   ```cmd
+   composer -V
+   ```
 
 ---
 
