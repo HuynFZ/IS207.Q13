@@ -15,7 +15,7 @@ services:
       retries: 5
 
   backend:
-    image: is207.q13:backend-latest
+    image: heliosryuu/is207.q13:backend-latest
     build:
       context: ./backend
     container_name: backend
@@ -39,7 +39,7 @@ services:
       - "${LARAVEL_PORT:-8000}:8000"
 
   frontend:
-    image: is207.q13:frontend-latest
+    image: heliosryuu/is207.q13:frontend-latest
     build:
       context: ./frontend
     container_name: frontend

@@ -1,0 +1,59 @@
+services:
+  backend:
+    image: heliosryuu/is207.q13:backend-latest
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Laravel app
+      APP_ENV: local
+      APP_DEBUG: "true"
+      LARAVEL_PORT: "8000"
+      TZ: Asia/Ho_Chi_Minh
+
+      # Database (MySQL)
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: admin
+      DB_PASSWORD: secret
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: |
+      sh -c "
+        sleep 5 &&
+        php artisan key:generate --force &&
+        php artisan migrate --force &&
+        php artisan serve --host=0.0.0.0 --port=8000
+      "
+
+  frontend:
+    image: heliosryuu/is207.q13:frontend-latest
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      FRONTEND_PORT: "5173"
+      VITE_API_BASE_URL: http://localhost:8000/api
+      TZ: Asia/Ho_Chi_Minh
+
+  mysql:
+    image: mysql:9.4.0
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PORT: 3306
+    volumes:
+      - ./database/mysql:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5

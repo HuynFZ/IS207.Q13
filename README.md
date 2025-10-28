@@ -39,12 +39,12 @@ Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. C�
 | STT |   MSSV   |           Họ và Tên |                                                      Github |                  Email |
 |-----|:--------:|--------------------:|------------------------------------------------------------:|-----------------------:|
 | 1   | 23520641 | Nguyễn Văn Mạnh Huy |                         [HuynFZ](https://github.com/HuynFZ) | 23520641@gm.uit.edu.vn |
-| 2   | 23521030 |  Nguyễn Lê Bảo Ngọc |               [ngochoccode](https://github.com/ngochoccode) | 23521030@gm.uit.edu.vn |
-| 3   | 23520698 |  Nguyễn Thành Khang | [Nguyen-Thanh-Khang](https://github.com/Nguyen-Thanh-Khang) | 23520698@gm.uit.edu.vn |
-| 4   | 23521434 |        Lê Vĩnh Thái |     [VinhThaideptraia](https://github.com/VinhThaideptraia) | 23521417@gm.uit.edu.vn |
-| 5   | 23521434 |      Phạm Nhật Khoa |                     [Khoa0216](https://github.com/Khoa0216) | 23520753@gm.uit.edu.vn |
-| 6   | 23521434 |      Nguyễn Văn Nam |               [Sinister-VN](https://github.com/Sinister-VN) | 23520982@gm.uit.edu.vn |
-| 7   | 23521434 |         Ngô Tiến Sỹ |               [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn |
+| 2   | 23521434 |         Ngô Tiến Sỹ |               [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn |
+| 3   | 23521030 |  Nguyễn Lê Bảo Ngọc |               [ngochoccode](https://github.com/ngochoccode) | 23521030@gm.uit.edu.vn |
+| 4   | 23520698 |  Nguyễn Thành Khang | [Nguyen-Thanh-Khang](https://github.com/Nguyen-Thanh-Khang) | 23520698@gm.uit.edu.vn |
+| 5   | 23521434 |        Lê Vĩnh Thái |     [VinhThaideptraia](https://github.com/VinhThaideptraia) | 23521417@gm.uit.edu.vn |
+| 6   | 23521434 |      Phạm Nhật Khoa |                     [Khoa0216](https://github.com/Khoa0216) | 23520753@gm.uit.edu.vn |
+| 7   | 23521434 |      Nguyễn Văn Nam |               [Sinister-VN](https://github.com/Sinister-VN) | 23520982@gm.uit.edu.vn |
 
 ---
 
@@ -97,30 +97,45 @@ Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. C�
 ---
 
 ## KHỞI CHẠY DỰ ÁN
-> ⚠️ **Phải bật Docker Desktop trước khi chạy lệnh** ⚠️
-> 
-> CHỈ DÙNG CHO MỤC ĐÍCH KIỂM THỬ
+> ⚠️ **Phải bật Docker Desktop trước khi chạy lệnh**
 >
-> ⚠️ (Dành cho dev khi chạy code lần đầu): Khi clone về lần đầu, sẽ không có file .env tại thư mục backend vì lý do bảo mật. Các dev chạy lệnh dưới đây:
-> ```powershell
-> Copy-Item -Path "./backend/.env.example" -Destination "./backend/.env" -Force
-> ```
-> - Sau đó liên hệ với Ngô Tiến Sỹ | [helios-ryuu](https://github.com/helios-ryuu) | 23521367@gm.uit.edu.vn để nhận APP_KEY trong .env qua email
-> - Tại thư mục gốc của dự án:
-> ```powershell
-> docker compose up -d
-> ```
-- Truy cập giao diện người dùng: http://localhost:5173
-> Những lệnh khác
-> - Tắt web:
-> ```powershell
-> docker compose down
-> ```
-> - Tắt web và xóa volume
-> ```powershell
-> docker compose down -v
-> ```
+> 👉 **Chỉ dùng cho mục đích kiểm thử (testing environment)**
 
+### Bước 1: Chuẩn bị file môi trường (.env)
+Khi clone repo lần đầu, thư mục `backend` **chưa có file `.env`** vì lý do bảo mật.  
+Các dev cần tạo file `.env` dựa trên `.env.example`:
+
+```powershell
+Copy-Item -Path "./backend/.env.example" -Destination "./backend/.env" -Force
+```
+
+### Bước 2: Chạy dự án bằng Docker Compose
+- Tại thư mục gốc của dự án:
+```powershell
+docker compose up -d
+
+# Để chạy trực tiếp image testing từ Docker Hub (Phải xóa các image frontend và backend đang tồn tại)
+# docker compose -f docker-compose.test.yml up -d
+
+# Tắt toàn bộ container testing
+# docker compose -f docker-compose.test.yml down
+```
+- Sau khi container khởi chạy thành công, truy cập:
+> - 🔗 Frontend: http://localhost:5173
+> - 🔗 Backend API (Laravel): http://localhost:8000
+
+### Bước 3: Dừng và dọn dẹp container
+- Tắt toàn bộ container:
+```powershell
+docker compose down
+```
+- Tắt container và xóa volume (dữ liệu trong DB,...):
+```powershell
+docker compose down -v
+```
+
+> - File .env trong backend chỉ cần tạo một lần duy nhất khi clone repo.
+> - Các biến môi trường trong docker-compose.test.yml (như DB_HOST, DB_PORT, ...) sẽ ghi đè lên giá trị trong .env, nên không cần tự sửa thủ công.
 
 ---
 
@@ -139,7 +154,7 @@ Seminar nhóm: SEO trang web trong thời đại ngày nay khi có AI Search. C�
 2. **Framework và công cụ:**
 
     * [Vite](https://vitejs.dev/)
-    * [React](https://react.dev/)
+    * [Vue](https://vuejs.org/)
 
 ### Database & Cache
 

@@ -5,11 +5,16 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+.github
 
 # Build outputs
 /dist
 /build
 
-database
+database/
 setup.ps1
+push-image.ps1
 Dockerfiles
+
+!backend/database/
+!backend/database/**
