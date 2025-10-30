@@ -47,7 +47,8 @@ services:
     env_file: [ .env.docker ]
     command: [ "npm", "run", "dev", "--", "--host" ]
     volumes:
-      - ./frontend:/app:cached
+      - ./frontend/src:/app/src:cached
+      - ./frontend/public:/app/public:cached
       - frontend-node-modules:/app/node_modules
     ports:
       - "${FRONTEND_PORT:-5173}:5173"

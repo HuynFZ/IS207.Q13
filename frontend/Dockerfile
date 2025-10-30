@@ -1,5 +1,5 @@
 # ---------- Base Node Image ----------
-FROM node:25.0.0-alpine3.22
+FROM node:22-alpine
 WORKDIR /app
 
 # Copy và cài đặt phụ thuộc (có lock file để cache tốt)
