@@ -3,9 +3,11 @@
     <div class="container">
       <div class="logo">VietMarket</div>
       <nav>
-        <a href="#">Trang chủ</a>
-        <a href="#">Sản phẩm</a>
-        <a href="#">Liên hệ</a>
+        <router-link to="/">🏠 Trang chủ</router-link>
+        
+        <router-link to="/products">🏷️ Sản phẩm</router-link> 
+        
+        <router-link to="/contact">✉️ Liên hệ</router-link>
       </nav>
     </div>
   </header>
@@ -36,8 +38,12 @@ nav {
   gap: 2rem;
 }
 
-nav a {
+/* Áp dụng CSS để căn chỉnh Icon Unicode và chữ */
+nav a, nav router-link { 
   text-decoration: none;
   color: #333;
+  display: flex; 
+  align-items: center;
+  gap: 0.5rem; /* Tạo khoảng cách giữa icon và chữ */
 }
 </style>

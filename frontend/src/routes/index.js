@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Admin from '../pages/Admin.vue'
 
+import ProductCatalog from '../pages/ProductCatalog.vue' // Trang Danh mục Sản phẩm
+import OrderManagement from '../pages/OrderManagement.vue' // Trang Quản lý Đơn hàng
+
 const routes = [
   {
     path: '/',
@@ -16,6 +19,16 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin
+  },
+  {
+    path: '/products',
+    name: 'ProductCatalog',
+    component: ProductCatalog
+  },
+  {
+    path: '/orders',
+    name: 'OrderManagement',
+    component: OrderManagement
   }
 ]
 
