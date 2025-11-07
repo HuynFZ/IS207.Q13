@@ -63,7 +63,7 @@
 import { ref, onMounted } from 'vue';
 
 // --- COMPONENT IMPORTS ---
-import Header from '../components/Header.vue';
+import Header from '../components/Header-HomePage.vue';
 import Footer from '../components/Footer.vue';
 import CategoryGrid from '../components/CategoryGrid.vue';
 import ProductCard from '../components/Product/ProductCard.vue';

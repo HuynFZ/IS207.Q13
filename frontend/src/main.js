@@ -19,8 +19,8 @@ import {
     faSnowflake, faSoap, faShirt, faClock, faShoePrints, faShoppingBag, faSprayCan, faGem,
     faGuitar, faBook, faFutbol, faImage, faGamepad, faCompactDisc,
     faPrint, faScrewdriverWrench, faDrumstickBite, faBacon, faEgg, faMugHot, 
-    faBirthdayCake, faCandyCane, faCocktail, faEllipsisH
-
+    faBirthdayCake, faCandyCane, faCocktail, faEllipsisH,
+    faBars, faSearch, faHeart, faComment, faBell
 } from '@fortawesome/free-solid-svg-icons'
 
 // 2. THÊM VÀO THƯ VIỆN
@@ -38,7 +38,8 @@ library.add(
     faSnowflake, faSoap, faShirt, faClock, faShoePrints, faShoppingBag, faSprayCan, faGem,
     faGuitar, faBook, faFutbol, faImage, faGamepad, faCompactDisc,
     faPrint, faScrewdriverWrench,faDrumstickBite, faBacon, faEgg, faMugHot, 
-    faBirthdayCake, faCandyCane, faCocktail, faEllipsisH
+    faBirthdayCake, faCandyCane, faCocktail, faEllipsisH,
+    faBars, faSearch, faHeart, faComment, faBell
 )
 
 

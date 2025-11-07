@@ -1,4 +1,6 @@
 <template>
+  <HeaderOther />
+
   <div class="product-catalog">
     <div class="container">
       
@@ -234,15 +236,17 @@
 </template>
 
 <script setup>
-// (Toàn bộ <script setup> giữ nguyên như file trước,
-// chỉ thêm logic 'selectedSubCategory')
+import { useRoute } from 'vue-router';
 
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import ProductCard from '../components/Product/ProductCard.vue';
 import CategoryModal from '../components/CategoryModal.vue';
 import AdvancedFilterModal from '../components/AdvancedFilterModal.vue';
 import PriceFilterModal from '../components/PriceFilterModal.vue';
 import ConditionModal from '../components/ConditionModal.vue';
+import HeaderOther from '../components/Header-Other.vue';
+
+const route = useRoute(); // Lấy thông tin URL hiện tại
 
 // --- Trạng thái cho 4 Modal ---
 const selectedCategory = ref('');
@@ -373,6 +377,19 @@ const products = ref(
     location: 'Bình Dương',
     image: 'placeholder.jpg'
   })
+);
+
+watch(
+  () => route.query.category, // 1. Theo dõi query 'category' trên URL
+  (newCategory) => {
+    // 2. Khi URL thay đổi, gán giá trị mới cho selectedCategory
+    if (newCategory) {
+      selectedCategory.value = newCategory;
+    } else {
+      selectedCategory.value = ''; // Nếu không có category, reset
+    }
+  },
+  { immediate: true } // 3. 'immediate: true' sẽ chạy hàm này ngay khi component tải (thay thế cho onMounted)
 );
 </script>
 
