@@ -12,23 +12,23 @@
 
         <div class="category-dropdown-menu" v-if="isCategoryMenuOpen">
           <ul>
-        <li @click="selectCategory('Xe cộ')">Xe cộ</li>
-        <li @click="selectCategory('Đồ điện tử')">Đồ điện tử</li>
-        <li @click="selectCategory('Thú cưng')">Thú cưng</li>
-        <li @click="selectCategory('Đồ ăn, Thực phẩm và các loại khác')">Đồ ăn, Thực phẩm và các loại khác</li>
-        <li @click="selectCategory('Tủ lạnh, Máy lạnh, Máy giặt')">Tủ lạnh, Máy lạnh, Máy giặt</li>
-        <li @click="selectCategory('Đồ gia dụng, Nội thất, Cây cảnh')">Đồ gia dụng, Nội thất, Cây cảnh</li>
-        <li @click="selectCategory('Thời trang, Đồ dùng cá nhân')">Thời trang, Đồ dùng cá nhân</li>
-        <li @click="selectCategory('Giải trí, Thể thao, Sở thích')">Giải trí, Thể thao, Sở thích</li>
-        <li @click="selectCategory('Đồ dùng văn phòng, Công nông nghiệp')">Đồ dùng văn phòng, Công nông nghiệp</li>
-      </ul>
+            <li @click="selectCategory('Xe cộ')">Xe cộ</li>
+            <li @click="selectCategory('Đồ điện tử')">Đồ điện tử</li>
+            <li @click="selectCategory('Thú cưng')">Thú cưng</li>
+            <li @click="selectCategory('Đồ ăn, Thực phẩm và các loại khác')">Đồ ăn, Thực phẩm và các loại khác</li>
+            <li @click="selectCategory('Tủ lạnh, Máy lạnh, Máy giặt')">Tủ lạnh, Máy lạnh, Máy giặt</li>
+            <li @click="selectCategory('Đồ gia dụng, Nội thất, Cây cảnh')">Đồ gia dụng, Nội thất, Cây cảnh</li>
+            <li @click="selectCategory('Thời trang, Đồ dùng cá nhân')">Thời trang, Đồ dùng cá nhân</li>
+            <li @click="selectCategory('Giải trí, Thể thao, Sở thích')">Giải trí, Thể thao, Sở thích</li>
+            <li @click="selectCategory('Đồ dùng văn phòng, Công nông nghiệp')">Đồ dùng văn phòng, Công nông nghiệp</li>
+          </ul>
         </div>
       </div>
 
       <div class="center-section">
-        <div class="location-picker">
+        <div class="location-picker" @click="isLocationPickerOpen = true">
           <font-awesome-icon icon="map-marker-alt" />
-          <span>Toàn quốc</span>
+          <span>{{ selectedLocation }}</span>
           <font-awesome-icon icon="chevron-down" class="arrow" />
         </div>
         <div class="search-bar">
@@ -38,6 +38,7 @@
           </button>
         </div>
       </div>
+      
       <div class="right-section">
         <div class="action-icons">
           <button class="icon-btn" title="Yêu thích">
@@ -50,9 +51,11 @@
             <font-awesome-icon icon="bell" />
           </button>
         </div>
+        
         <button class="post-btn">
           Đăng tin
         </button>
+
         <div class="user-actions">
           <template v-if="!isLoggedIn">
             <button class="auth-btn login-btn" @click="handleLogin">Đăng nhập</button>
@@ -73,28 +76,44 @@
       </div>
     </div>
     
-    </header>
+  </header>
+
+  <LocationPickerModal 
+    v-if="isLocationPickerOpen"
+    @close="isLocationPickerOpen = false"
+    @applyLocation="handleLocationApply"
+  />
 </template>
 
 <script setup>
-// (Script setup giữ nguyên như file trước)
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'; 
+import LocationPickerModal from './LocationPickerModal.vue';
 
 const isCategoryMenuOpen = ref(false);
 const headerRef = ref(null);
 const router = useRouter();
 
+// SỬA ĐỔI: Thêm lại logic cho Đăng nhập/Đăng xuất
 const isLoggedIn = ref(false); 
 const isUserMenuOpen = ref(false);
+
+const isLocationPickerOpen = ref(false);
+const selectedLocation = ref('Toàn quốc');
+
+const handleLocationApply = (locationName) => {
+  selectedLocation.value = locationName;
+  isLocationPickerOpen.value = false;
+};
+// ------------------------------
+
+// SỬA ĐỔI: Thêm lại các hàm xử lý login
 const handleLogin = () => { isLoggedIn.value = true; };
 const handleLogout = () => { isLoggedIn.value = false; isUserMenuOpen.value = false; };
 const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; };
 
-const toggleCategoryMenu = () => {
-  isCategoryMenuOpen.value = !isCategoryMenuOpen.value;
-};
-
+// (Các hàm logic cũ giữ nguyên)
+const toggleCategoryMenu = () => { isCategoryMenuOpen.value = !isCategoryMenuOpen.value; };
 const selectCategory = (categoryName) => {
   router.push({ 
     path: '/products', 
@@ -102,25 +121,21 @@ const selectCategory = (categoryName) => {
   });
   isCategoryMenuOpen.value = false;
 };
-
 const handleClickOutside = (event) => {
   if (isCategoryMenuOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
     isCategoryMenuOpen.value = false;
   }
+  // SỬA ĐỔI: Thêm lại logic click-outside cho menu user
   if (isUserMenuOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
      isUserMenuOpen.value = false;
   }
 };
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
+onMounted(() => { document.addEventListener('click', handleClickOutside); });
+onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside); });
 </script>
 
 <style scoped>
+/* (Toàn bộ CSS của Header-Other.vue giữ nguyên) */
 .app-header {
   background: white;
   border-bottom: 1px solid #e0e0e0;
@@ -128,22 +143,19 @@ onBeforeUnmount(() => {
   position: relative; 
   z-index: 1001;
 }
-
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
-
-/* SỬA ĐỔI 2 (CSS): Thêm position: relative */
 .left-section {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  position: relative; /* Cho phép dropdown định vị theo */
+  gap: 0.5rem;
+  position: relative;
 }
 .menu-btn {
   background: none;
@@ -156,8 +168,6 @@ onBeforeUnmount(() => {
   height: 40px;
   display: block;
 }
-
-/* ... (CSS cho center-section và right-section giữ nguyên) ... */
 .center-section {
   flex-grow: 1;
   display: flex;
@@ -197,6 +207,7 @@ onBeforeUnmount(() => {
   font-size: 1.1rem;
   color: black;
 }
+/* SỬA ĐỔI: Thêm lại CSS cho .right-section và các nút con */
 .right-section {
   display: flex;
   align-items: center;
@@ -237,11 +248,12 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 .auth-btn {
-  padding: 0.6rem 1rem;
+  padding: 0.75rem 1.25rem; 
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: bold; 
+  font-size: 0.9rem; 
 }
 .login-btn {
   background-color: #f5a623;
@@ -297,32 +309,26 @@ onBeforeUnmount(() => {
 .user-dropdown button:hover {
   background-color: #f5f5f5;
 }
-
-/* SỬA ĐỔI 3 (CSS): Sửa CSS cho Dropdown Danh mục */
 .category-dropdown-menu {
   position: absolute; 
-  top: calc(100% + 10px); /* Đặt vị trí dưới .left-section (cách 10px) */
-  left: 0; /* Căn lề trái với .left-section */
-  /* XÓA: width: 100%; */
-  min-width: 300px; /* Đặt chiều rộng tối thiểu cho menu */
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 300px;
   background: white;
   border-bottom: 1px solid #eee;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   max-height: 400px;
   overflow-y: auto;
-  border-radius: 8px; /* Thêm bo góc */
+  border-radius: 8px;
 }
 .category-dropdown-menu ul {
   list-style: none;
-  padding: 0.5rem; /* Sửa padding */
+  padding: 0.5rem;
   margin: 0;
-  /* XÓA: max-width: 450px; */
-  /* XÓA: margin: 0 auto; */
-  /* XÓA: padding-left: 2rem; */
 }
 .category-dropdown-menu li {
-  padding: 0.75rem 1rem; /* Sửa padding */
+  padding: 0.75rem 1rem;
   font-size: 1rem;
   cursor: pointer;
   border-radius: 4px;

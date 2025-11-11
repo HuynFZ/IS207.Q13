@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import '@vueform/slider/themes/default.css'
+import '@vueform/multiselect/themes/default.css'
 
 // 1. CHỈ IMPORT CÁC ICON FREE MÀ BẠN CẦN
 import { 
@@ -20,7 +21,8 @@ import {
     faGuitar, faBook, faFutbol, faImage, faGamepad, faCompactDisc,
     faPrint, faScrewdriverWrench, faDrumstickBite, faBacon, faEgg, faMugHot, 
     faBirthdayCake, faCandyCane, faCocktail, faEllipsisH,
-    faBars, faSearch, faHeart, faComment, faBell
+    faBars, faSearch, faHeart, faComment, faBell,
+    faLocationCrosshairs, faBuilding, faChevronRight, faArrowLeft, faHeadset
 } from '@fortawesome/free-solid-svg-icons'
 
 // 2. THÊM VÀO THƯ VIỆN
@@ -39,7 +41,7 @@ library.add(
     faGuitar, faBook, faFutbol, faImage, faGamepad, faCompactDisc,
     faPrint, faScrewdriverWrench,faDrumstickBite, faBacon, faEgg, faMugHot, 
     faBirthdayCake, faCandyCane, faCocktail, faEllipsisH,
-    faBars, faSearch, faHeart, faComment, faBell
+    faBars, faSearch, faHeart, faComment, faBell, faLocationCrosshairs, faBuilding, faChevronRight, faArrowLeft, faHeadset
 )
 
 
