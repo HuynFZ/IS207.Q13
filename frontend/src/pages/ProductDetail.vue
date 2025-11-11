@@ -9,7 +9,6 @@
       </nav>
 
       <div class="product-main-card">
-
         <section class="product-gallery">
           <div class="main-image-wrapper">
             <button class="gallery-nav prev" @click="prevImage">&lt;</button>
@@ -27,7 +26,6 @@
             <button class="thumb-nav-next">&gt;</button>
           </div>
         </section>
-
         <section class="product-info">
           <h1>{{ product?.name }}</h1>
           <p class="description">{{ product?.description }}</p>
@@ -112,25 +110,30 @@
 
       <section class="related-listings-card" id="seller-listings">
         <h2>Tin khác của {{ product?.seller.name }}</h2>
-        <div class="horizontal-product-list">
+        <div class="grid-product-list">
           <ProductCard
-              v-for="item in sellerListings"
+              v-for="item in visibleSellerListings"
               :key="item.id"
               :product="item"
           />
         </div>
+        <button v-if="hasMoreSeller" class="see-more-btn" @click="loadMoreSeller">
+          Xem thêm
+        </button>
       </section>
 
       <section class="related-listings-card" id="similar-listings">
         <h2>Tin đăng tương tự</h2>
-        <div class="horizontal-product-list">
+        <div class="grid-product-list">
           <ProductCard
-              v-for="item in similarListings"
+              v-for="item in visibleSimilarListings"
               :key="item.id"
               :product="item"
           />
         </div>
-        <button class="see-more-btn">Xem thêm</button>
+        <button v-if="hasMoreSimilar" class="see-more-btn" @click="loadMoreSimilar">
+          Xem thêm
+        </button>
       </section>
 
     </main>
@@ -142,21 +145,28 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 // import axios from 'axios';
-
 import Header from "../components/Header.vue";
-import Footer from "../components/Footer.vue"; // Thêm import Footer
+import Footer from "../components/Footer.vue";
 import CommentSection from '../components/CommentSection.vue';
-// === GIỮ NGUYÊN PRODUCT CARD CỦA BẠN ===
 import ProductCard from '../components/Product/ProductCard_NoReceive.vue';
 
 const route = useRoute();
 const product = ref(null);
 const loading = ref(true);
+// (Tất cả state logic cho "Xem thêm" giữ nguyên)
 const sellerListings = ref([]);
 const similarListings = ref([]);
-const currentImageIndex = ref(0);
+const visibleSellerCount = ref(4);
+const visibleSimilarCount = ref(8);
+const visibleSellerListings = computed(() => sellerListings.value.slice(0, visibleSellerCount.value));
+const visibleSimilarListings = computed(() => similarListings.value.slice(0, visibleSimilarCount.value));
+const hasMoreSeller = computed(() => visibleSellerCount.value < sellerListings.value.length);
+const hasMoreSimilar = computed(() => visibleSimilarCount.value < similarListings.value.length);
+const loadMoreSeller = () => { visibleSellerCount.value += 4; };
+const loadMoreSimilar = () => { visibleSimilarCount.value += 8; };
 
 // (Logic cho gallery ảnh giữ nguyên)
+const currentImageIndex = ref(0);
 const currentImage = computed(() => {
   if (product.value && product.value.images && product.value.images.length > 0) {
     return product.value.images[currentImageIndex.value];
@@ -166,17 +176,21 @@ const currentImage = computed(() => {
 const nextImage = () => { if (product.value) currentImageIndex.value = (currentImageIndex.value + 1) % product.value.images.length; };
 const prevImage = () => { if (product.value) currentImageIndex.value = (currentImageIndex.value - 1 + product.value.images.length) % product.value.images.length; };
 const selectImage = (index) => { currentImageIndex.value = index; };
+
+// Watcher: Tải lại data khi URL thay đổi
 watch(() => route.params.id, (newId) => {
-  // Nếu ID thay đổi, gọi lại hàm fetch để tải sản phẩm mới
   if (newId) {
     fetchProductDetail();
-    // Cuộn trang lên đầu
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
-// (Logic fetchProductDetail giữ nguyên)
+
+// Logic lấy dữ liệu
 const fetchProductDetail = async () => {
   loading.value = true;
+  visibleSellerCount.value = 4; // Reset
+  visibleSimilarCount.value = 8; // Reset
+
   const productId = route.params.id;
   try {
     await new Promise(r => setTimeout(r, 500));
@@ -195,19 +209,25 @@ const fetchProductDetail = async () => {
       specs: [{ label: 'Hãng:', value: 'Apple' }, { label: 'Dòng máy:', value: 'Iphone 17 pro max' }, { label: 'Tình trạng:', value: 'Đã sử dụng' }],
       comments: [{ id: 1, author: 'Nguyen Van A', avatar: 'https://via.placeholder.com/40/FFD60A/333333?text=A', text: 'Bình luận...', timestamp: '2 tháng trước' }, { id: 2, author: 'Nguyen Van B', avatar: 'https://via.placeholder.com/40/007BFF/FFFFFF?text=B', text: 'Sản phẩm tốt!', timestamp: '2 tháng trước' }]
     };
-    // DỮ LIỆU GIẢ LẬP (khớp với ProductCard của bạn)
-    sellerListings.value = [
-      { id: 101, title: 'Tin khác 1', price: '1.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Seller+1' },
-      { id: 102, title: 'Tin khác 2', price: '2.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Seller+2' },
-      { id: 103, title: 'Tin khác 3', price: '3.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Seller+3' },
-    ];
-    similarListings.value = [
-      { id: 201, title: 'Tin tương tự 1', price: '5.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+1' },
-      { id: 202, title: 'Tin tương tự 2', price: '6.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+2' },
-      { id: 203, title: 'Tin tương tự 3', price: '7.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+3' },
-      { id: 204, title: 'Tin tương tự 2', price: '6.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+2' },
-      { id: 205, title: 'Tin tương tự 3', price: '7.000.000 đ', location: 'Tp Hồ Chí Minh', imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+3' },
-    ];
+
+    // Tải TẤT CẢ "Tin khác" (Mock 10 tin)
+    sellerListings.value = Array.from({ length: 10 }, (_, i) => ({
+      id: 100 + i + 1,
+      title: `Tin khác ${i + 1}`,
+      price: `${i + 1}.000.000 đ`,
+      location: 'Tp Hồ Chí Minh',
+      imageUrl: `https://via.placeholder.com/200/eeeeee/cccccc?text=Seller+${i + 1}`
+    }));
+
+    // Tải TẤT CẢ "Tin tương tự" (Mock 20 tin)
+    similarListings.value = Array.from({ length: 20 }, (_, i) => ({
+      id: 200 + i + 1,
+      title: `Tin tương tự ${i + 1}`,
+      price: `${i + 5}.000.000 đ`,
+      location: 'Tp Hồ Chí Minh',
+      imageUrl: `https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+${i + 1}`
+    }));
+
   } catch (error) { console.error(error); }
   loading.value = false;
 };
@@ -266,31 +286,26 @@ onMounted(() => { fetchProductDetail(); });
 /*
  * === CSS CHO BỐ CỤC BÊN DƯỚI (ĐÃ SỬA) ===
  */
-
-/* Bố cục 2 cột cho (Mô tả + Thông tin) VÀ (Bình luận) */
 .product-info-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Cột trái 2 phần, cột phải 1 phần */
+  grid-template-columns: 2fr 1fr;
   gap: 30px;
   margin-top: 30px;
 }
 @media (max-width: 992px) {
   .product-info-layout {
-    grid-template-columns: 1fr; /* Chuyển thành 1 cột trên mobile */
+    grid-template-columns: 1fr;
   }
 }
-
 .bottom-left-column {
   display: flex;
   flex-direction: column;
-  gap: 30px; /* Khoảng cách giữa "Mô tả" và "Thông tin" */
+  gap: 30px;
 }
 .bottom-right-column {
   display: flex;
   flex-direction: column;
 }
-
-/* Thẻ chung cho Mô tả, Thông tin (trong 2 cột) */
 .bottom-card {
   background-color: #ffffff;
   padding: 24px;
@@ -309,14 +324,13 @@ onMounted(() => { fetchProductDetail(); });
 .spec-label { color: #555; }
 .spec-value { font-weight: 500; }
 
-/* Thẻ cho Tin đăng (nằm bên dưới, full-width) */
 .related-listings-card {
   background-color: #ffffff;
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  margin-top: 30px; /* Thêm khoảng cách với layout 2 cột ở trên */
+  margin-top: 30px;
 }
 .related-listings-card h2 {
   font-size: 1.5rem;
@@ -324,25 +338,19 @@ onMounted(() => { fetchProductDetail(); });
   margin-top: 0;
   margin-bottom: 20px;
 }
+
+/*
+ * === CSS ĐÃ SỬA: SỬ DỤNG GRID CHO CẢ HAI ===
+ */
+
+/* "Tin khác" (Bây giờ là Grid) */
 .horizontal-product-list {
-  display: flex;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 15px;
-  padding-bottom: 15px;
-  margin: 0 -24px; /* Kéo ra sát lề thẻ */
-  padding-left: 24px;
-  padding-right: 24px;
-}
-/* Style cho ProductCard NGUYÊN BẢN của bạn */
-.horizontal-product-list :deep(.product-card) {
-  width: 220px; /* Cố định chiều rộng */
-  flex-shrink: 0;
-}
-.horizontal-product-list :deep(a) {
-  flex-shrink: 0;
 }
 
-/* Sửa lại .grid-product-list (nếu bạn muốn "Tin tương tự" là lưới) */
+/* "Tin tương tự" (Grid) */
 .grid-product-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
