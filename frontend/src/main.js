@@ -6,8 +6,7 @@ import router from './routes'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import '@vueform/slider/themes/default.css'
-import '@vueform/multiselect/themes/default.css'
+import '@vueform/slider/themes/default.css'// Thanh trượt chọn giá lọc
 
 // 1. CHỈ IMPORT CÁC ICON FREE MÀ BẠN CẦN
 import { 
