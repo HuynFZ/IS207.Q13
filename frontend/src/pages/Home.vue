@@ -1,10 +1,5 @@
-<script setup>
-import Header from '../components/Header.vue'
-import Footer from '../components/Footer.vue'
-</script>
-
 <template>
-  <div class="page">
+  <div class="home-page">
     <Header />
     <main class="container">
 
@@ -164,13 +159,8 @@ const loadMore = () => {
   min-height: 100vh;
   background-color: #f4f4f4;
 }
-
-.content {
-  flex: 1;
-  padding: 2rem 1rem;
-}
-
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 20px auto;
   padding: 0 15px;
