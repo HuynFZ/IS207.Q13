@@ -21,13 +21,13 @@
             <span>Thú cưng</span>
           </li>
           <li @click="select('Đồ ăn, Thực phẩm và các loại khác')">
-            <span>Đồ ăn, thực phẩm và các loại khác</span>
+            <span>Đồ ăn, Thực phẩm và các loại khác</span>
           </li>
           <li @click="select('Tủ lạnh, Máy lạnh, Máy giặt')">
-            <span>Tủ lạnh, máy lạnh, máy giặt</span>
+            <span>Tủ lạnh, Máy lạnh, Máy giặt</span>
           </li>
           <li @click="select('Đồ gia dụng, Nội thất, Cây cảnh')">
-            <span>Đồ gia dụng, nội thất, cây cảnh</span>
+            <span>Đồ gia dụng, Nội thất, Cây cảnh</span>
           </li>
           <li @click="select('Thời trang, Đồ dùng cá nhân')">
             <span>Thời trang, Đồ dùng cá nhân</span>
@@ -36,7 +36,7 @@
             <span>Giải trí, Thể thao, Sở thích</span>
           </li>
           <li @click="select('Đồ dùng văn phòng, Công nông nghiệp')">
-            <span>Đồ dùng văn phòng, công nông nghiệp</span>
+            <span>Đồ dùng văn phòng, Công nông nghiệp</span>
           </li>
         </ul>
       </div>
