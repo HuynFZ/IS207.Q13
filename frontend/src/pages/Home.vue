@@ -47,8 +47,14 @@
 
       <section class="about-us">
         <h2>VietMarket - Cho đồ cũ một đời mới, cho bạn một trải nghiệm hay</h2>
-        <p>Chúng tôi tin rằng giá trị không nằm ở việc "mới" hay "cũ"...</p>
-      </section>
+        <p>Chúng tôi tin rằng giá trị không nằm ở việc "mới" hay "cũ". Nó nằm ở công năng, ở kỷ niệm, và ở hành trình tiếp theo của món đồ đó.
+          <br>
+          VietMarket không chỉ là một nền tảng mua bán. Chúng tôi là một cộng đồng, nơi bạn có thể trao đi chiếc xe đạp cũ đã cùng bạn tới trường, tìm lại cuốn sách hiếm tưởng đã mất, hay bắt đầu một công việc mới từ một tin đăng.
+          <br>
+          Ra đời với sự thấu hiểu thói quen tiêu dùng của người Việt, VietMarket biến mỗi giao dịch thành một cuộc gặp gỡ. Đó là nơi bạn "pass" lại đam mê cho một người đồng điệu, giải phóng không gian sống, và góp phần tạo nên một vòng tuần hoàn ý nghĩa cho đồ vật.
+          <br>
+          Chúng tôi kết nối hàng triệu người Việt mỗi ngày — từ thành thị đến nông thôn — tạo nên một khu chợ số vừa quen thuộc như tiếng rao ngoài ngõ, vừa hiện đại và an toàn tuyệt đối</p>
+      </section>>
 
     </main>
     <Footer />
