@@ -1,10 +1,5 @@
-<script setup>
-import Header from '../components/Header.vue'
-import Footer from '../components/Footer.vue'
-</script>
-
 <template>
-  <div class="page">
+  <div class="home-page">
     <Header />
     <main class="container">
 
@@ -70,10 +65,52 @@ import CategoryGrid from '../components/CategoryGrid.vue';
 import ProductCard from '../components/Product/ProductCard_NoReceive.vue';
 import SearchFilterBar from '../components/SearchFilterBar.vue';
 
-// --- TẠO MỘT "DATABASE" GIẢ LẬP LỚN ---
-// (Tạo 30 sản phẩm để test: 12 + 8 + 8 + 2)
-const mockDB = [];
-for (let i = 1; i <= 30; i++) {
+// --- "DATABASE" GIẢ LẬP (KHÔI PHỤC DỮ LIỆU ĐẸP) ---
+const mockDB = [
+  {
+    id: 1,
+    title: 'Áo thun nam tay ngắn hè 2024',
+    price: '150.000 đ',
+    originalPrice: '250.000 đ',
+    seller: 'Shop Thời Trang',
+    location: 'Quận 1, TP. HCM',
+    imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Image+1',
+    username: 'Shop Thời Trang'
+  },
+  {
+    id: 2,
+    title: 'Tai nghe Bluetooth không dây X15',
+    price: '320.000 đ',
+    originalPrice: '',
+    seller: 'Điện Tử Xanh',
+    location: 'Q. Cầu Giấy, Hà Nội',
+    imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Image+2',
+    username: 'Điện Tử Xanh'
+  },
+  {
+    id: 3,
+    title: 'Bàn phím cơ DareU EK87',
+    price: '790.000 đ',
+    originalPrice: '990.000 đ',
+    seller: 'PC Gear',
+    location: 'Quận 3, TP. HCM',
+    imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Image+3',
+    username: 'PC Gear'
+  },
+  {
+    id: 4,
+    title: 'Sofa giường đa năng thông minh',
+    price: '2.800.000 đ',
+    originalPrice: '',
+    seller: 'Nội Thất Giá Kho',
+    location: 'Q. Bình Thạnh, TP. HCM',
+    imageUrl: 'https://via.placeholder.com/200/eeeeee/cccccc?text=Image+4',
+    username: 'Nội Thất Giá Kho'
+  }
+];
+
+// Thêm 26 sản phẩm mẫu nữa để test "Xem thêm"
+for (let i = 5; i <= 30; i++) {
   mockDB.push({
     id: i,
     title: `Sản phẩm mẫu ${i}`,
@@ -81,44 +118,37 @@ for (let i = 1; i <= 30; i++) {
     originalPrice: `${(i * 100 + 150)}.000 đ`,
     seller: 'Shop VietMarket',
     location: `Quận ${i % 12 + 1}, TP. HCM`,
-    imageUrl: `https://via.placeholder.com/200/${Math.floor(Math.random()*16777215).toString(16)}/FFFFFF?text=Product+${i}`
+    imageUrl: `https://via.placeholder.com/200/${Math.floor(Math.random()*16777215).toString(16)}/FFFFFF?text=Product+${i}`,
+    username: 'Shop VietMarket'
   });
 }
+// --- KẾT THÚC DATABASE GIẢ LẬP ---
 
-// --- PAGE STATE (ĐÃ CẬP NHẬT) ---
+// --- PAGE STATE ---
 const activeTab = ref('for-you');
 const products = ref([]);
 const loading = ref(false);
-const pageToLoad = ref(1); // Theo dõi trang hiện tại
-const hasMoreProducts = ref(true); // Theo dõi xem còn SP để tải không
+const pageToLoad = ref(1);
+const hasMoreProducts = ref(true);
 
-// --- HÀM LẤY DỮ LIỆU (ĐÃ CẬP NHẬT) ---
-const fetchProducts = async () => {
+// --- HÀM LẤY DỮ LIỆU (ĐÃ SỬA) ---
+const fetchProducts = () => { // Bỏ async
   if (loading.value) return;
   loading.value = true;
 
   try {
     const isInitialLoad = (pageToLoad.value === 1);
-    const limit = isInitialLoad ? 12 : 8; // Lần đầu tải 12, các lần sau tải 8
-
-    // Tính toán offset (vị trí bắt đầu lấy)
-    // Trang 1: offset 0, (lấy 12) -> [0-11]
-    // Trang 2: offset 12, (lấy 8) -> [12-19]
-    // Trang 3: offset 20, (lấy 8) -> [20-27]
+    const limit = isInitialLoad ? 12 : 8; // Lần đầu 12, sau đó 8
     const offset = isInitialLoad ? 0 : 12 + (pageToLoad.value - 2) * 8;
 
-    console.log(`Đang tải tab: ${activeTab.value}, Trang: ${pageToLoad.value}, Giới hạn: ${limit}, Offset: ${offset}`);
-
     // === NƠI BẠN GỌI API THẬT ===
-    // (Trong API thật, bạn chỉ cần truyền 'pageToLoad' và 'limit'
-    // hoặc 'offset' và 'limit' cho backend)
+    // (Trong API thật, bạn sẽ dùng await axios.get(...) ở đây)
     // const response = await axios.get(`/api/products?tab=${activeTab.value}&page=${pageToLoad.value}&limit=${limit}`);
     // const newData = response.data.products;
 
-    // === DỮ LIỆU GIẢ LẬP (SỬ DỤNG .slice()) ===
-    await new Promise(r => setTimeout(r, 500)); // Giả lập chờ mạng
+    // === PHẦN ĐÃ SỬA: BỔ SUNG LẠI DỮ LIỆU GIẢ LẬP ===
     const newData = mockDB.slice(offset, offset + limit);
-    // ---------------------------------
+    // ==========================================
 
     // Nối dữ liệu mới vào danh sách hiện tại
     products.value.push(...newData);
@@ -140,7 +170,7 @@ onMounted(() => {
   fetchProducts(); // Tự động tải 12 SP đầu tiên
 });
 
-// --- HÀM KHI CHUYỂN TAB (ĐÃ CẬP NHẬT) ---
+// --- HÀM KHI CHUYỂN TAB ---
 const setActiveTab = (tabName) => {
   activeTab.value = tabName;
   products.value = []; // Xóa sản phẩm cũ
@@ -164,13 +194,8 @@ const loadMore = () => {
   min-height: 100vh;
   background-color: #f4f4f4;
 }
-
-.content {
-  flex: 1;
-  padding: 2rem 1rem;
-}
-
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 20px auto;
   padding: 0 15px;
