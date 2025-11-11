@@ -145,7 +145,7 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 // import axios from 'axios';
-import Header from "../components/Header.vue";
+import Header from '../components/Header-HomePage.vue';
 import Footer from "../components/Footer.vue";
 import CommentSection from '../components/CommentSection.vue';
 import ProductCard from '../components/Product/ProductCard_NoReceive.vue';
