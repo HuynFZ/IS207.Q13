@@ -23,6 +23,7 @@ import {
 
 } from '@fortawesome/free-solid-svg-icons'
 
+
 // 2. THÊM VÀO THƯ VIỆN
 library.add(
     faHome, faTags, faEnvelope, 
@@ -40,6 +41,8 @@ library.add(
     faPrint, faScrewdriverWrench,faDrumstickBite, faBacon, faEgg, faMugHot, 
     faBirthdayCake, faCandyCane, faCocktail, faEllipsisH
 )
+
+// (brand icons were temporarily added here; removed to revert logo changes)
 
 
 const app = createApp(App)
