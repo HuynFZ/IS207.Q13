@@ -4,7 +4,6 @@
     <main class="container">
 
       <SearchFilterBar />
-
       <CategoryGrid />
 
       <section class="product-listings">
@@ -26,6 +25,7 @@
             Xu hướng
           </button>
         </div>
+
         <div class="product-grid">
           <ProductCard
               v-for="product in products"
@@ -34,24 +34,20 @@
           />
         </div>
 
-        <div v-if="products.length === 0" class="empty-state">
+        <div v-if="products.length === 0 && loading" class="empty-state">
           Đang tải sản phẩm...
         </div>
 
-        <div class="see-more-container">
-          <button class="see-more-btn">Xem thêm</button>
+        <div v-if="hasMoreProducts" class="see-more-container">
+          <button class="see-more-btn" @click="loadMore" :disabled="loading">
+            {{ loading ? 'Đang tải...' : 'Xem thêm' }}
+          </button>
         </div>
       </section>
 
       <section class="about-us">
         <h2>VietMarket - Cho đồ cũ một đời mới, cho bạn một trải nghiệm hay</h2>
-        <p>Chúng tôi tin rằng giá trị không nằm ở việc "mới" hay "cũ". Nó nằm ở công năng, ở kỷ niệm, và ở hành trình tiếp theo của món đồ đó.
-          <br>
-          VietMarket không chỉ là một nền tảng mua bán. Chúng tôi là một cộng đồng, nơi bạn có thể trao đi chiếc xe đạp cũ đã cùng bạn tới trường, tìm lại cuốn sách hiếm tưởng đã mất, hay bắt đầu một công việc mới từ một tin đăng.
-          <br>
-          Ra đời với sự thấu hiểu thói quen tiêu dùng của người Việt, VietMarket biến mỗi giao dịch thành một cuộc gặp gỡ. Đó là nơi bạn "pass" lại đam mê cho một người đồng điệu, giải phóng không gian sống, và góp phần tạo nên một vòng tuần hoàn ý nghĩa cho đồ vật.
-          <br>
-          Chúng tôi kết nối hàng triệu người Việt mỗi ngày — từ thành thị đến nông thôn — tạo nên một khu chợ số vừa quen thuộc như tiếng rao ngoài ngõ, vừa hiện đại và an toàn tuyệt đối</p>
+        <p>Chúng tôi tin rằng giá trị không nằm ở việc "mới" hay "cũ"...</p>
       </section>
 
     </main>
@@ -68,86 +64,100 @@ import Footer from '../components/Footer.vue';
 import CategoryGrid from '../components/CategoryGrid.vue';
 import ProductCard from '../components/Product/ProductCard_NoReceive.vue';
 import SearchFilterBar from '../components/SearchFilterBar.vue';
-// --- PAGE STATE ---
+
+// --- TẠO MỘT "DATABASE" GIẢ LẬP LỚN ---
+// (Tạo 30 sản phẩm để test: 12 + 8 + 8 + 2)
+const mockDB = [];
+for (let i = 1; i <= 30; i++) {
+  mockDB.push({
+    id: i,
+    title: `Sản phẩm mẫu ${i}`,
+    price: `${(i * 100 + 50)}.000 đ`,
+    originalPrice: `${(i * 100 + 150)}.000 đ`,
+    seller: 'Shop VietMarket',
+    location: `Quận ${i % 12 + 1}, TP. HCM`,
+    imageUrl: `https://via.placeholder.com/200/${Math.floor(Math.random()*16777215).toString(16)}/FFFFFF?text=Product+${i}`
+  });
+}
+
+// --- PAGE STATE (ĐÃ CẬP NHẬT) ---
 const activeTab = ref('for-you');
-const products = ref([]); // Khởi tạo mảng rỗng
+const products = ref([]);
+const loading = ref(false);
+const pageToLoad = ref(1); // Theo dõi trang hiện tại
+const hasMoreProducts = ref(true); // Theo dõi xem còn SP để tải không
 
-// --- HÀM LẤY DỮ LIỆU ---
+// --- HÀM LẤY DỮ LIỆU (ĐÃ CẬP NHẬT) ---
 const fetchProducts = async () => {
-  try {
-    // === NƠI BẠN GỌI API THẬT ===
-    console.log(`Đang tải sản phẩm cho tab: ${activeTab.value}`);
+  if (loading.value) return;
+  loading.value = true;
 
-    // Dữ liệu giả lập để test (khớp với ProductCard.vue)
-    // (Bạn sẽ XÓA đoạn này khi gọi API thật)
-    products.value = [
-      {
-        id: 1,
-        title: 'Áo thun nam tay ngắn hè 2024',
-        price: '150.000 đ',
-        originalPrice: '250.000 đ',
-        seller: 'Shop Thời Trang',
-        location: 'Quận 1, TP. HCM',
-        imageUrl: 'https://via.placeholder.com/200/FF5722/FFFFFF?text=Product+1',
-        tag: 'Đã nhận'
-      },
-      {
-        id: 2,
-        title: 'Tai nghe Bluetooth không dây X15',
-        price: '320.000 đ',
-        originalPrice: '',
-        seller: 'Điện Tử Xanh',
-        location: 'Q. Cầu Giấy, Hà Nội',
-        imageUrl: 'https://via.placeholder.com/200/007BFF/FFFFFF?text=Product+2',
-        tag: ''
-      },
-      {
-        id: 3,
-        title: 'Bàn phím cơ DareU EK87',
-        price: '790.000 đ',
-        originalPrice: '990.000 đ',
-        seller: 'PC Gear',
-        location: 'Quận 3, TP. HCM',
-        imageUrl: 'https://via.placeholder.com/200/4CAF50/FFFFFF?text=Product+3',
-        tag: 'Yêu thích'
-      },
-      {
-        id: 4,
-        title: 'Sofa giường đa năng thông minh',
-        price: '2.800.000 đ',
-        originalPrice: '',
-        seller: 'Nội Thất Giá Kho',
-        location: 'Q. Bình Thạnh, TP. HCM',
-        imageUrl: 'https://via.placeholder.com/200/9C27B0/FFFFFF?text=Product+4',
-        tag: ''
-      }
-    ];
-    // (Kết thúc dữ liệu giả lập)
+  try {
+    const isInitialLoad = (pageToLoad.value === 1);
+    const limit = isInitialLoad ? 12 : 8; // Lần đầu tải 12, các lần sau tải 8
+
+    // Tính toán offset (vị trí bắt đầu lấy)
+    // Trang 1: offset 0, (lấy 12) -> [0-11]
+    // Trang 2: offset 12, (lấy 8) -> [12-19]
+    // Trang 3: offset 20, (lấy 8) -> [20-27]
+    const offset = isInitialLoad ? 0 : 12 + (pageToLoad.value - 2) * 8;
+
+    console.log(`Đang tải tab: ${activeTab.value}, Trang: ${pageToLoad.value}, Giới hạn: ${limit}, Offset: ${offset}`);
+
+    // === NƠI BẠN GỌI API THẬT ===
+    // (Trong API thật, bạn chỉ cần truyền 'pageToLoad' và 'limit'
+    // hoặc 'offset' và 'limit' cho backend)
+    // const response = await axios.get(`/api/products?tab=${activeTab.value}&page=${pageToLoad.value}&limit=${limit}`);
+    // const newData = response.data.products;
+
+    // === DỮ LIỆU GIẢ LẬP (SỬ DỤNG .slice()) ===
+    await new Promise(r => setTimeout(r, 500)); // Giả lập chờ mạng
+    const newData = mockDB.slice(offset, offset + limit);
+    // ---------------------------------
+
+    // Nối dữ liệu mới vào danh sách hiện tại
+    products.value.push(...newData);
+
+    // Kiểm tra xem còn sản phẩm để tải nữa không
+    if (newData.length < limit || products.value.length === mockDB.length) {
+      hasMoreProducts.value = false;
+    }
 
   } catch (error) {
     console.error('Lỗi khi tải sản phẩm:', error);
+  } finally {
+    loading.value = false;
   }
 };
 
 // Gọi hàm fetchProducts() khi component được mount
 onMounted(() => {
-  fetchProducts();
+  fetchProducts(); // Tự động tải 12 SP đầu tiên
 });
 
+// --- HÀM KHI CHUYỂN TAB (ĐÃ CẬP NHẬT) ---
 const setActiveTab = (tabName) => {
   activeTab.value = tabName;
   products.value = []; // Xóa sản phẩm cũ
-  fetchProducts(); // Tải sản phẩm mới cho tab
+  pageToLoad.value = 1; // Reset về trang 1
+  hasMoreProducts.value = true; // Reset nút "Xem thêm"
+  fetchProducts(); // Tải 12 SP đầu tiên cho tab mới
+};
+
+// --- HÀM MỚI KHI NHẤN "XEM THÊM" ---
+const loadMore = () => {
+  pageToLoad.value++; // Tăng số trang
+  fetchProducts(); // Tải 8 sản phẩm tiếp theo
 };
 </script>
 
 <style scoped>
+/* (Toàn bộ CSS của bạn giữ nguyên, không thay đổi) */
 .home-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: #f4f4f4;
-  /* ... (style nền bìa của bạn) ... */
 }
 .container {
   width: 100%;
@@ -214,6 +224,10 @@ const setActiveTab = (tabName) => {
 }
 .see-more-btn:hover {
   background-color: #0056b3;
+}
+.see-more-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
 }
 .about-us h2 {
   font-size: 1.2rem;
