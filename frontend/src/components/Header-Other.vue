@@ -66,6 +66,7 @@
               <img src="/avatar.jpg" alt="Avatar" class="avatar">
               <font-awesome-icon icon="chevron-down" class="arrow-small" />
               <div v-if="isUserMenuOpen" class="user-dropdown">
+                <router-link to="/profile/social">Trang cá nhân</router-link>
                 <router-link to="/profile">Thông tin cá nhân</router-link>
                 <router-link v-if="user && user.role === 'admin'" to="/admin" class="admin-link">Admin</router-link>
                 <button @click="handleLogout">Đăng xuất</button>
