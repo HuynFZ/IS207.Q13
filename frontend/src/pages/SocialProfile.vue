@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '../utils/useAuth'
-import Header from '../components/Header.vue'
+import Header from '../components/Header-HomePage.vue'
 import Footer from '../components/Footer.vue'
 
 const router = useRouter()
