@@ -9,7 +9,6 @@
         <router-link to="/" class="logo">
           <img src="/logo.jpg" alt="VietMarket Logo">
         </router-link>
-
         <div class="category-dropdown-menu" v-if="isCategoryMenuOpen">
           <ul>
             <li @click="selectCategory('Xe cộ')">Xe cộ</li>
@@ -49,10 +48,11 @@
         <button class="post-btn">
           Đăng tin
         </button>
+        
         <div class="user-actions">
           <template v-if="!isLoggedIn">
-            <button class="auth-btn login-btn" @click="handleLogin">Đăng nhập</button>
-            <button class="auth-btn register-btn">Đăng ký</button>
+            <router-link to="/login" class="auth-btn login-btn">Đăng nhập</router-link>
+            <router-link to="/register" class="auth-btn register-btn">Đăng ký</router-link>
           </template>
           <template v-else>
             <router-link to="/manage-posts" class="manage-btn">Quản lý tin</router-link>
@@ -61,6 +61,7 @@
               <font-awesome-icon icon="chevron-down" class="arrow-small" />
               <div v-if="isUserMenuOpen" class="user-dropdown">
                 <router-link to="/profile">Thông tin cá nhân</router-link>
+                <router-link v-if="user && user.role === 'admin'" to="/admin" class="admin-link">Admin</router-link>
                 <button @click="handleLogout">Đăng xuất</button>
               </div>
             </div>
@@ -70,27 +71,30 @@
     </div>
     
   </header>
-
+  
   </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'; 
-
-// (Đã xóa import LocationPickerModal)
+// SỬA ĐỔI: Import useAuth (giống đồng đội)
+import { useAuth } from '../utils/useAuth';
 
 const isCategoryMenuOpen = ref(false);
 const headerRef = ref(null);
 const router = useRouter();
 
-const isLoggedIn = ref(false); 
+// SỬA ĐỔI: Lấy trạng thái từ useAuth
+const { isLoggedIn, user, logout } = useAuth(); // Giả định useAuth có hàm logout()
 const isUserMenuOpen = ref(false);
 
-// (Đã xóa logic LocationPicker)
+// SỬA ĐỔI: handleLogout gọi hàm logout từ useAuth
+const handleLogout = () => { 
+  logout(); // Gọi hàm logout của useAuth
+  isUserMenuOpen.value = false; 
+};
 
 // (Các hàm logic cũ giữ nguyên)
-const handleLogin = () => { isLoggedIn.value = true; };
-const handleLogout = () => { isLoggedIn.value = false; isUserMenuOpen.value = false; };
 const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; };
 const toggleCategoryMenu = () => { isCategoryMenuOpen.value = !isCategoryMenuOpen.value; };
 
@@ -102,7 +106,7 @@ const selectCategory = (categoryName) => {
   isCategoryMenuOpen.value = false;
 };
 
-// BỔ SUNG: Hàm cho nút "Mua sắm ngay"
+// Hàm cho nút "Mua sắm ngay"
 const goToProducts = () => {
   router.push('/products');
 };
@@ -114,14 +118,13 @@ const handleClickOutside = (event) => {
   if (isUserMenuOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
      isUserMenuOpen.value = false;
   }
-  // (Đã xóa logic click-outside của LocationPicker)
 };
 onMounted(() => { document.addEventListener('click', handleClickOutside); });
 onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside); });
 </script>
 
 <style scoped>
-/* (CSS cho Header, Container, Left, Right giữ nguyên) */
+/* (Toàn bộ CSS của Header-HomePage.vue giữ nguyên) */
 .app-header {
   background: white;
   border-bottom: 1px solid #e0e0e0;
@@ -154,19 +157,12 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   height: 40px;
   display: block;
 }
-
-/* SỬA ĐỔI: CSS Khối Giữa */
 .center-section {
   flex-grow: 1;
   display: flex;
-  justify-content: center; /* Căn giữa 2 nút */
+  justify-content: center;
   gap: 1rem;
-  /* (Đã xóa border) */
 }
-
-/* (Đã xóa CSS .location-picker, .search-bar, .search-btn) */
-
-/* BỔ SUNG: CSS cho 2 nút mới */
 .shop-now-btn, .support-btn {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -183,18 +179,15 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
-
 .shop-now-btn {
-  background-color: #f5a623; /* Màu cam chính */
+  background-color: #f5a623;
   color: black;
 }
 .support-btn {
-  background-color: #f5f5f5; /* Màu xám nhạt */
+  background-color: #f5f5ff;
   color: #333;
   border: 1px solid #ddd;
 }
-
-/* (CSS cho .right-section và dropdowns giữ nguyên) */
 .right-section {
   display: flex;
   align-items: center;
@@ -234,6 +227,7 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   font-weight: 500;
   white-space: nowrap;
 }
+/* SỬA ĐỔI: Thêm CSS cho <router-link> */
 .auth-btn {
   padding: 0.75rem 1.25rem; 
   border: none;
@@ -241,6 +235,8 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   cursor: pointer;
   font-weight: bold; 
   font-size: 0.9rem; 
+  text-decoration: none;
+  display: inline-block;
 }
 .login-btn {
   background-color: #f5a623;

@@ -9,7 +9,6 @@
         <router-link to="/" class="logo">
           <img src="/logo.jpg" alt="VietMarket Logo">
         </router-link>
-
         <div class="category-dropdown-menu" v-if="isCategoryMenuOpen">
           <ul>
             <li @click="selectCategory('Xe cộ')">Xe cộ</li>
@@ -58,8 +57,8 @@
 
         <div class="user-actions">
           <template v-if="!isLoggedIn">
-            <button class="auth-btn login-btn" @click="handleLogin">Đăng nhập</button>
-            <button class="auth-btn register-btn">Đăng ký</button>
+            <router-link to="/login" class="auth-btn login-btn">Đăng nhập</router-link>
+            <router-link to="/register" class="auth-btn register-btn">Đăng ký</router-link>
           </template>
           <template v-else>
             <router-link to="/manage-posts" class="manage-btn">Quản lý tin</router-link>
@@ -68,6 +67,7 @@
               <font-awesome-icon icon="chevron-down" class="arrow-small" />
               <div v-if="isUserMenuOpen" class="user-dropdown">
                 <router-link to="/profile">Thông tin cá nhân</router-link>
+                <router-link v-if="user && user.role === 'admin'" to="/admin" class="admin-link">Admin</router-link>
                 <button @click="handleLogout">Đăng xuất</button>
               </div>
             </div>
@@ -83,19 +83,22 @@
     @close="isLocationPickerOpen = false"
     @applyLocation="handleLocationApply"
   />
-</template>
+  
+  </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'; 
 import LocationPickerModal from './LocationPickerModal.vue';
+// SỬA ĐỔI: Import useAuth (giống đồng đội)
+import { useAuth } from '../utils/useAuth';
 
 const isCategoryMenuOpen = ref(false);
 const headerRef = ref(null);
 const router = useRouter();
 
-// SỬA ĐỔI: Thêm lại logic cho Đăng nhập/Đăng xuất
-const isLoggedIn = ref(false); 
+// SỬA ĐỔI: Lấy trạng thái từ useAuth
+const { isLoggedIn, user, logout } = useAuth(); // Giả định useAuth có hàm logout()
 const isUserMenuOpen = ref(false);
 
 const isLocationPickerOpen = ref(false);
@@ -107,12 +110,14 @@ const handleLocationApply = (locationName) => {
 };
 // ------------------------------
 
-// SỬA ĐỔI: Thêm lại các hàm xử lý login
-const handleLogin = () => { isLoggedIn.value = true; };
-const handleLogout = () => { isLoggedIn.value = false; isUserMenuOpen.value = false; };
-const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; };
+// SỬA ĐỔI: handleLogout gọi hàm logout từ useAuth
+const handleLogout = () => { 
+  logout(); // Gọi hàm logout của useAuth
+  isUserMenuOpen.value = false; 
+};
 
 // (Các hàm logic cũ giữ nguyên)
+const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; };
 const toggleCategoryMenu = () => { isCategoryMenuOpen.value = !isCategoryMenuOpen.value; };
 const selectCategory = (categoryName) => {
   router.push({ 
@@ -125,7 +130,6 @@ const handleClickOutside = (event) => {
   if (isCategoryMenuOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
     isCategoryMenuOpen.value = false;
   }
-  // SỬA ĐỔI: Thêm lại logic click-outside cho menu user
   if (isUserMenuOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
      isUserMenuOpen.value = false;
   }
@@ -135,7 +139,7 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
 </script>
 
 <style scoped>
-/* (Toàn bộ CSS của Header-Other.vue giữ nguyên) */
+/* (Toàn bộ CSS giữ nguyên) */
 .app-header {
   background: white;
   border-bottom: 1px solid #e0e0e0;
@@ -207,7 +211,6 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   font-size: 1.1rem;
   color: black;
 }
-/* SỬA ĐỔI: Thêm lại CSS cho .right-section và các nút con */
 .right-section {
   display: flex;
   align-items: center;
@@ -247,6 +250,7 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   font-weight: 500;
   white-space: nowrap;
 }
+/* SỬA ĐỔI: Thêm CSS cho <router-link> */
 .auth-btn {
   padding: 0.75rem 1.25rem; 
   border: none;
@@ -254,6 +258,8 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   cursor: pointer;
   font-weight: bold; 
   font-size: 0.9rem; 
+  text-decoration: none; /* <-- Bắt buộc cho router-link */
+  display: inline-block; /* <-- Bắt buộc cho router-link */
 }
 .login-btn {
   background-color: #f5a623;
