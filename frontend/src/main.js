@@ -24,6 +24,7 @@ import {
     faLocationCrosshairs, faBuilding, faChevronRight, faArrowLeft, faHeadset
 } from '@fortawesome/free-solid-svg-icons'
 
+
 // 2. THÊM VÀO THƯ VIỆN
 library.add(
     faHome, faTags, faEnvelope, 
@@ -42,6 +43,8 @@ library.add(
     faBirthdayCake, faCandyCane, faCocktail, faEllipsisH,
     faBars, faSearch, faHeart, faComment, faBell, faLocationCrosshairs, faBuilding, faChevronRight, faArrowLeft, faHeadset
 )
+
+// (brand icons were temporarily added here; removed to revert logo changes)
 
 
 const app = createApp(App)
