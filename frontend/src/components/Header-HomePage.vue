@@ -38,7 +38,7 @@
           <button class="icon-btn" title="Yêu thích">
             <font-awesome-icon icon="heart" />
           </button>
-          <button class="icon-btn" title="Trò chuyện">
+          <button class="icon-btn" title="Trò chuyện" @click="handleChatClick">
             <font-awesome-icon icon="comment" />
           </button>
           <button class="icon-btn" title="Thông báo">
@@ -70,32 +70,46 @@
         </div>
       </div>
     </div>
-    
   </header>
-  
-  </template>
+  <AuthRedirectModal
+    v-if="isAuthModalOpen"
+    @close="isAuthModalOpen = false"
+  />
+</template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'; 
-// SỬA ĐỔI: Import useAuth (giống đồng đội)
 import { useAuth } from '../utils/useAuth';
+// import LoginModal from './LoginModal.vue'; // <-- ĐÃ XÓA (Không dùng modal)
 
 const isCategoryMenuOpen = ref(false);
 const headerRef = ref(null);
 const router = useRouter();
 
-// SỬA ĐỔI: Lấy trạng thái từ useAuth
-const { isLoggedIn, user, logout } = useAuth(); // Giả định useAuth có hàm logout()
+// Lấy trạng thái từ useAuth
+const { isLoggedIn, user, logout } = useAuth(); 
 const isUserMenuOpen = ref(false);
 
-// SỬA ĐỔI: handleLogout gọi hàm logout từ useAuth
+// const isLoginModalOpen = ref(false); // <-- ĐÃ XÓA
+// const handleLogin = () => { ... }; // <-- ĐÃ XÓA (Vì <router-link> sẽ xử lý)
+// const onLoginSuccess = () => { ... }; // <-- ĐÃ XÓA
+
+// SỬA ĐỔI: Hàm xử lý khi bấm nút Chat
+const handleChatClick = () => {
+  if (isLoggedIn.value) {
+    router.push('/chat'); // Nếu đã đăng nhập, chuyển trang
+  } else {
+    router.push('/login'); // Nếu chưa, chuyển đến trang /login
+  }
+};
+
+// (Các hàm logic cũ giữ nguyên)
 const handleLogout = () => { 
   logout(); // Gọi hàm logout của useAuth
   isUserMenuOpen.value = false; 
 };
 
-// (Các hàm logic cũ giữ nguyên)
 const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; };
 const toggleCategoryMenu = () => { isCategoryMenuOpen.value = !isCategoryMenuOpen.value; };
 
@@ -227,6 +241,17 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
   color: #333;
   font-weight: 500;
   white-space: nowrap;
+
+  /* BỔ SUNG: Thêm các dòng này để tạo viền nút */
+  border: 1px solid #ccc;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
+
+/* (Tùy chọn) Thêm hiệu ứng hover */
+.manage-btn:hover {
+  border-color: #007bff;
+  background-color: #f5f5f5;
 }
 /* SỬA ĐỔI: Thêm CSS cho <router-link> */
 .auth-btn {
