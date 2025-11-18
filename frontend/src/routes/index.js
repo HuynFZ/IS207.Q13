@@ -6,6 +6,7 @@ import Profile from '../pages/Profile.vue'
 import SocialProfile from '../pages/SocialProfile.vue'
 import Forgot from '../pages/Forgot.vue'
 import Register from '../pages/Register.vue'
+import ManageListings from '../pages/ManageListings.vue';
 
 import ProductCatalog from '../pages/ProductCatalog.vue' // Trang Danh mục Sản phẩm
 import OrderManagement from '../pages/OrderManagement.vue' // Trang Quản lý Đơn hàng
@@ -71,6 +72,11 @@ const routes = [
         path: '/chat',
         name: 'Chat',
         component: Chat
+    },
+    {
+        path: '/manage-posts',
+        name: 'ManageListings',
+        component: ManageListings
     }
 ]
 
