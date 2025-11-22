@@ -2,30 +2,50 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../utils/useAuth'
+import { useToast } from '../utils/useToast'
+import api from '../utils/api'
 
 const router = useRouter()
 const { login } = useAuth()
+const { showError, showSuccess } = useToast()
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
 
-function submit(e) {
+async function submit(e) {
   e?.preventDefault()
   error.value = ''
+  
   if (!email.value || !password.value) {
     error.value = 'Vui lòng nhập email và mật khẩu.'
     return
   }
 
-  // Simulate login — replace with real API call
   loading.value = true
-  setTimeout(() => {
+  
+  try {
+    const response = await api.post('/auth/login', {
+      email: email.value,
+      password: password.value
+    })
+    
+    if (response.data.success) {
+      const { user, token } = response.data.data
+      login(token, user)
+      showSuccess('Đăng nhập thành công!')
+      router.push('/home')
+    }
+  } catch (err) {
+    if (err.response?.data?.errors) {
+      error.value = Object.values(err.response.data.errors).flat()[0]
+    } else {
+      error.value = err.response?.data?.message || 'Đăng nhập thất bại'
+    }
+    showError(error.value)
+  } finally {
     loading.value = false
-    // set a mock token and user
-    login('mock-token', { name: 'Người dùng', email: email.value })
-    router.push('/home')
-  }, 700)
+  }
 }
 
 function socialLogin(provider){

@@ -22,11 +22,31 @@ export function useToast() {
     toastType.value = '';
   };
 
+  const showSuccess = (message, duration = 3000) => {
+    showToast(message, 'success', duration);
+  };
+
+  const showError = (message, duration = 5000) => {
+    showToast(message, 'error', duration);
+  };
+
+  const showWarning = (message, duration = 4000) => {
+    showToast(message, 'warning', duration);
+  };
+
+  const showInfo = (message, duration = 3000) => {
+    showToast(message, 'info', duration);
+  };
+
   return {
     toastMessage,
     toastType,
     toastKey,
     showToast,
     closeToast,
+    showSuccess,
+    showError,
+    showWarning,
+    showInfo,
   };
 }
