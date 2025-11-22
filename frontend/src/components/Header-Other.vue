@@ -51,7 +51,7 @@
           </button>
         </div>
         
-        <button class="post-btn">
+        <button class="post-btn" @click="router.push('/post')">
           Đăng tin
         </button>
 

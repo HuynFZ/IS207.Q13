@@ -47,6 +47,11 @@ function socialRegister(provider){
       <div class="top-return">
         <router-link to="/home">Trở về trang chủ</router-link>
       </div>
+      
+      <div class="logo-container">
+        <img src="/logo-2.jpg" alt="VietMarket Logo" class="logo" />
+      </div>
+      
       <div class="brand">
         <h1>Tạo tài khoản</h1>
         <p>Đăng ký để bắt đầu giao dịch</p>
@@ -110,12 +115,37 @@ function socialRegister(provider){
   padding:28px;
   box-sizing:border-box;
 }
-.brand h1{ font-size:22px; margin-bottom:6px }
-.brand p{ color:#666; font-size:13px; margin-bottom:18px }
+.brand h1{ font-size:22px; margin-bottom:6px; text-align: center }
+.brand p{ color:#666; font-size:13px; margin-bottom:18px; text-align: center }
  .top-return{ margin-bottom:12px; display:flex; align-items:center }
  .top-return a{ color:#374151; text-decoration:none; font-size:14px; font-weight:500 }
  .top-return a::before{ content:'<'; margin-right:8px; color:#374151; font-weight:700 }
  .top-return a:hover{ color:#111 }
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  animation: fadeInDown 0.6s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .form .field{ display:block; margin-bottom:12px }
 .form .field span{ display:block; font-size:13px; margin-bottom:6px; color:#444 }
 .form input{ width:100%; padding:10px 12px; border:1px solid #e6e9f2; border-radius:8px; font-size:14px; outline:none }
