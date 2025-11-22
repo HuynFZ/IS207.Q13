@@ -12,6 +12,10 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table = 'users';
+    protected $primaryKey = 'userId';
+    public $timestamps = false; // vì em dùng cột riêng thay cho created_at / updated_at
+
     /**
      * The attributes that are mass assignable.
      *

@@ -34,6 +34,11 @@
 | `php artisan db:seed --class=TaskSeeder`            | Chạy seeder cụ thể           |
 | `php artisan make:seeder TaskSeeder`                | Tạo seeder mới               |
 
+### 🗑️ Xóa Seeder & Factory
+Seeder và Factory không có lệnh xóa riêng, cần xóa file thủ công:
+- **Seeder**: Xóa file tại `database/seeders/TenSeeder.php`
+- **Factory**: Xóa file tại `database/factories/TenFactory.php`
+
 ---
 
 ## 4. ⚙️ Cache & Config
