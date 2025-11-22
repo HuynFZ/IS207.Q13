@@ -1,34 +1,73 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from '../utils/useToast'
+import api from '../utils/api'
 
 const router = useRouter()
+const { showError, showSuccess } = useToast()
 const name = ref('')
+const username = ref('')
 const email = ref('')
 const password = ref('')
 const password2 = ref('')
 const error = ref('')
 const loading = ref(false)
 
-function submit(e){
+async function submit(e){
   e?.preventDefault()
   error.value = ''
-  if(!name.value || !email.value || !password.value || !password2.value){
+  
+  if(!name.value || !username.value || !email.value || !password.value || !password2.value){
     error.value = 'Vui lòng điền đầy đủ thông tin.'
     return
   }
+  
   if(password.value !== password2.value){
     error.value = 'Mật khẩu xác nhận không khớp.'
     return
   }
 
-  // Simulate registration — replace with real API call
   loading.value = true
-  setTimeout(()=>{
+  
+  try {
+    console.log('Sending registration request...', {
+      name: name.value,
+      username: username.value,
+      email: email.value
+    })
+    
+    const response = await api.post('/auth/register', {
+      name: name.value,
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: password2.value
+    })
+    
+    console.log('Registration response:', response.data)
+    
+    if (response.data.success) {
+      showSuccess('Đăng ký thành công! Vui lòng đăng nhập.')
+      router.push('/login')
+    }
+  } catch (err) {
+    console.error('Registration error:', err)
+    console.error('Error response:', err.response)
+    
+    if (err.response?.data?.errors) {
+      error.value = Object.values(err.response.data.errors).flat()[0]
+    } else if (err.response?.data?.message) {
+      error.value = err.response.data.message
+    } else if (err.message) {
+      error.value = err.message
+    } else {
+      error.value = 'Đăng ký thất bại. Vui lòng kiểm tra kết nối.'
+    }
+    showError(error.value)
+  } finally {
     loading.value = false
-    // After successful register, go to login
-    router.push('/login')
-  }, 900)
+  }
 }
 
 function socialRegister(provider){
@@ -56,6 +95,11 @@ function socialRegister(provider){
         <label class="field">
           <span>Họ và tên</span>
           <input v-model="name" type="text" placeholder="Nguyễn Văn A" />
+        </label>
+
+        <label class="field">
+          <span>Tên đăng nhập</span>
+          <input v-model="username" type="text" placeholder="nguyenvana" />
         </label>
 
         <label class="field">

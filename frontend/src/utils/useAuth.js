@@ -1,4 +1,5 @@
 import { ref, computed } from 'vue'
+import api from './api'
 
 const tokenKey = 'app_token'
 const userKey = 'app_user'
@@ -13,11 +14,17 @@ function login(newToken, userInfo = null){
   if(userInfo) localStorage.setItem(userKey, JSON.stringify(userInfo))
 }
 
-function logout(){
-  token.value = ''
-  user.value = null
-  localStorage.removeItem(tokenKey)
-  localStorage.removeItem(userKey)
+async function logout(){
+  try {
+    await api.post('/auth/logout')
+  } catch (err) {
+    console.error('Logout error:', err)
+  } finally {
+    token.value = ''
+    user.value = null
+    localStorage.removeItem(tokenKey)
+    localStorage.removeItem(userKey)
+  }
 }
 
 const isLoggedIn = computed(()=> !!token.value)

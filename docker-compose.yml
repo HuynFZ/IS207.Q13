@@ -24,7 +24,6 @@ services:
     volumes:
       - ./backend:/app:cached
       - backend-vendor:/app/vendor
-      - backend-node-modules:/app/node_modules
     depends_on:
       mysql:
         condition: service_healthy
@@ -49,7 +48,6 @@ services:
     volumes:
       - ./frontend/src:/app/src:cached
       - ./frontend/public:/app/public:cached
-      - frontend-node-modules:/app/node_modules
     ports:
       - "${FRONTEND_PORT:-5173}:5173"
 
