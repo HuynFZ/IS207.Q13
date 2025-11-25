@@ -12,6 +12,7 @@ import ProductCatalog from '../pages/ProductCatalog.vue' // Trang Danh mục S�
 import OrderManagement from '../pages/OrderManagement.vue' // Trang Quản lý Đơn hàng
 import ProductDetail from '../pages/ProductDetail.vue';
 import Chat from '../pages/Chat.vue';
+import CreatePost from '../pages/CreatePost.vue';
 const routes = [
     {
         path: '/',
@@ -77,6 +78,11 @@ const routes = [
         path: '/manage-posts',
         name: 'ManageListings',
         component: ManageListings
+    },
+    {
+        path: '/post',
+        name: 'CreatePost',
+        component: CreatePost
     }
 ]
 
