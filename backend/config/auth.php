@@ -40,7 +40,15 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'sanctum', // Dòng này quan trọng
+            'provider' => 'users',
+            'hash' => false,
+        ],
     ],
+
+    
 
     /*
     |--------------------------------------------------------------------------
