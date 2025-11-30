@@ -18,3 +18,5 @@ Dockerfiles
 
 !backend/database/
 !backend/database/**
+
+/vendor
