@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WalletController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ShippingAddressController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
@@ -46,4 +51,32 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/images/{id}', [ProductImageController::class, 'destroy']);
     Route::post('/upload/image', [ProductImageController::class, 'uploadGeneral']);
     Route::delete('/upload/image/delete', [ProductImageController::class, 'deleteGeneral']); // Sửa path chút để dễ handle
+
+    // --- CART API ---
+    Route::get('/cart', [CartController::class, 'index']);             // Xem giỏ
+    Route::post('/cart/items', [CartController::class, 'store']);      // Thêm
+    Route::put('/cart/items/{id}', [CartController::class, 'update']); // Sửa (id là variant_id)
+    Route::delete('/cart/items/{id}', [CartController::class, 'destroy']); // Xóa (id là variant_id)
+    Route::delete('/cart', [CartController::class, 'clear']);          // Xóa hết
+    // --- SHIPPING ADDRESS API ---
+    Route::get('/addresses', [ShippingAddressController::class, 'index']);           // Xem list
+    Route::post('/addresses', [ShippingAddressController::class, 'store']);          // Thêm
+    Route::put('/addresses/{id}', [ShippingAddressController::class, 'update']);     // Sửa
+    Route::delete('/addresses/{id}', [ShippingAddressController::class, 'destroy']); // Xóa
+    Route::put('/addresses/{id}/set-default', [ShippingAddressController::class, 'setDefault']); // Đặt mặc định
+    // --- ORDER API ---
+    Route::post('/orders', [OrderController::class, 'store']);       // 1. Tạo đơn
+    Route::get('/orders', [OrderController::class, 'index']);        // 2. Xem list
+    Route::get('/orders/{id}', [OrderController::class, 'show']);    // 3. Xem chi tiết
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel']); // 4. Hủy đơn
+    Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']); // 5. Cập nhật trạng thái
+    // --- WALLET API ---
+    Route::get('/wallet', [WalletController::class, 'index']);           // Xem số dư
+    Route::post('/wallet/deposit', [WalletController::class, 'deposit']); // Nạp tiền
+    Route::post('/wallet/withdraw', [WalletController::class, 'withdraw']); // Rút tiền
+    Route::get('/wallet/transactions', [WalletController::class, 'history']); // Lịch sử
+    // --- TRANSACTION API ---
+    Route::get('/transactions', [TransactionController::class, 'index']);      // Xem danh sách
+    Route::get('/transactions/{id}', [TransactionController::class, 'show']);  // Xem chi tiết
+    Route::post('/transactions/verify', [TransactionController::class, 'verify']); // Xác thực
 });
