@@ -4,6 +4,8 @@ import Admin from '../pages/Admin.vue'
 import Login from '../pages/Login.vue'
 import Profile from '../pages/Profile.vue'
 import SocialProfile from '../pages/SocialProfile.vue'
+import EditProfile from '../pages/EditProfile.vue'
+import Favorites from '../pages/Favorites.vue'
 import Forgot from '../pages/Forgot.vue'
 import Register from '../pages/Register.vue'
 import ManageListings from '../pages/ManageListings.vue';
@@ -43,6 +45,16 @@ const routes = [
         path: '/profile/social',
         name: 'SocialProfile',
         component: SocialProfile
+    },
+    {
+        path: '/profile/edit',
+        name: 'EditProfile',
+        component: EditProfile
+    },
+    {
+        path: '/favorites',
+        name: 'Favorites',
+        component: Favorites
     },
     {
         path: '/forgot',

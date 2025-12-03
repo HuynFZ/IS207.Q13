@@ -35,15 +35,52 @@
       
       <div class="right-section">
         <div class="action-icons">
-          <button class="icon-btn" title="Yêu thích">
+          <button class="icon-btn" title="Yêu thích" @click="$router.push('/favorites')">
             <font-awesome-icon icon="heart" />
           </button>
           <button class="icon-btn" title="Trò chuyện" @click="handleChatClick">
             <font-awesome-icon icon="comment" />
           </button>
-          <button class="icon-btn" title="Thông báo">
-            <font-awesome-icon icon="bell" />
-          </button>
+          <div class="notification-wrapper">
+            <button class="icon-btn" title="Thông báo" @click.stop="toggleNotifications">
+              <font-awesome-icon icon="bell" />
+              <span v-if="unreadCount > 0" class="notification-badge">{{ unreadCount }}</span>
+            </button>
+            <div v-if="isNotificationOpen" class="notification-dropdown">
+              <div class="notification-header">
+                <h3>Thông báo</h3>
+                <button v-if="notifications.length > 0" class="mark-all-read" @click="markAllAsRead">
+                  Đánh dấu đã đọc
+                </button>
+              </div>
+              <div class="notification-list">
+                <div v-if="notifications.length === 0" class="empty-notifications">
+                  <span class="empty-icon">🔔</span>
+                  <p>Chưa có thông báo mới</p>
+                </div>
+                <div 
+                  v-for="notif in notifications" 
+                  :key="notif.id" 
+                  class="notification-item"
+                  :class="{ unread: !notif.read }"
+                  @click="handleNotificationClick(notif)"
+                >
+                  <div class="notif-icon" :class="notif.type">
+                    {{ getNotificationIcon(notif.type) }}
+                  </div>
+                  <div class="notif-content">
+                    <p class="notif-title">{{ notif.title }}</p>
+                    <p class="notif-message">{{ notif.message }}</p>
+                    <span class="notif-time">{{ notif.time }}</span>
+                  </div>
+                  <div v-if="!notif.read" class="unread-dot"></div>
+                </div>
+              </div>
+              <div v-if="notifications.length > 0" class="notification-footer">
+                <button @click="viewAllNotifications">Xem tất cả thông báo</button>
+              </div>
+            </div>
+          </div>
         </div>
         <button class="post-btn" @click="$router.push('/post')">
           Đăng tin
@@ -78,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router'; 
 import { useAuth } from '../utils/useAuth';
 // import LoginModal from './LoginModal.vue'; // <-- ĐÃ XÓA (Không dùng modal)
@@ -90,6 +127,49 @@ const router = useRouter();
 // Lấy trạng thái từ useAuth
 const { isLoggedIn, user, logout } = useAuth(); 
 const isUserMenuOpen = ref(false);
+
+// Notification state
+const isNotificationOpen = ref(false);
+const notifications = ref([
+  {
+    id: 1,
+    type: 'order',
+    title: 'Đơn hàng mới',
+    message: 'Bạn có đơn hàng mới từ Nguyễn Văn A',
+    time: '5 phút trước',
+    read: false,
+    link: '/orders'
+  },
+  {
+    id: 2,
+    type: 'message',
+    title: 'Tin nhắn mới',
+    message: 'Trần Thị B đã gửi tin nhắn cho bạn',
+    time: '15 phút trước',
+    read: false,
+    link: '/chat'
+  },
+  {
+    id: 3,
+    type: 'like',
+    title: 'Sản phẩm được yêu thích',
+    message: 'Sản phẩm "iPhone 13 Pro Max" của bạn được 5 người yêu thích',
+    time: '1 giờ trước',
+    read: false,
+    link: '/manage-posts'
+  },
+  {
+    id: 4,
+    type: 'system',
+    title: 'Cập nhật hệ thống',
+    message: 'Chúng tôi đã cập nhật tính năng mới cho ứng dụng',
+    time: '2 giờ trước',
+    read: true,
+    link: null
+  }
+]);
+
+const unreadCount = computed(() => notifications.value.filter(n => !n.read).length);
 
 // const isLoginModalOpen = ref(false); // <-- ĐÃ XÓA
 // const handleLogin = () => { ... }; // <-- ĐÃ XÓA (Vì <router-link> sẽ xử lý)
@@ -112,6 +192,34 @@ const handleLogout = () => {
 
 const toggleUserMenu = () => { isUserMenuOpen.value = !isUserMenuOpen.value; };
 const toggleCategoryMenu = () => { isCategoryMenuOpen.value = !isCategoryMenuOpen.value; };
+const toggleNotifications = () => { isNotificationOpen.value = !isNotificationOpen.value; };
+
+const markAllAsRead = () => {
+  notifications.value.forEach(n => n.read = true);
+};
+
+const handleNotificationClick = (notif) => {
+  notif.read = true;
+  if (notif.link) {
+    router.push(notif.link);
+  }
+  isNotificationOpen.value = false;
+};
+
+const viewAllNotifications = () => {
+  console.log('View all notifications');
+  isNotificationOpen.value = false;
+};
+
+const getNotificationIcon = (type) => {
+  const icons = {
+    order: '📦',
+    message: '💬',
+    like: '❤️',
+    system: '🔔'
+  };
+  return icons[type] || '🔔';
+};
 
 const selectCategory = (categoryName) => {
   router.push({ 
@@ -132,6 +240,9 @@ const handleClickOutside = (event) => {
   }
   if (isUserMenuOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
      isUserMenuOpen.value = false;
+  }
+  if (isNotificationOpen.value && headerRef.value && !headerRef.value.contains(event.target)) {
+    isNotificationOpen.value = false;
   }
 };
 onMounted(() => { document.addEventListener('click', handleClickOutside); });
@@ -344,5 +455,208 @@ onBeforeUnmount(() => { document.removeEventListener('click', handleClickOutside
 }
 .category-dropdown-menu li:hover {
   background-color: #f5f5f5;
+}
+
+/* Notification Dropdown */
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  width: 380px;
+  max-height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+}
+
+.notification-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.mark-all-read {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.mark-all-read:hover {
+  background: #eff6ff;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.empty-notifications {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+.empty-notifications p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.notification-item {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.notification-item:hover {
+  background: #f9fafb;
+}
+
+.notification-item.unread {
+  background: #eff6ff;
+}
+
+.notification-item.unread:hover {
+  background: #dbeafe;
+}
+
+.notif-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notif-icon.order {
+  background: #dbeafe;
+}
+
+.notif-icon.message {
+  background: #fef3c7;
+}
+
+.notif-icon.like {
+  background: #fce7f3;
+}
+
+.notif-icon.system {
+  background: #e0e7ff;
+}
+
+.notif-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.notif-message {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notif-time {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+  position: absolute;
+  top: 1.25rem;
+  right: 1rem;
+}
+
+.notification-footer {
+  padding: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.notification-footer button {
+  width: 100%;
+  padding: 0.625rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notification-footer button:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 </style>
