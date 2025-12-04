@@ -14,7 +14,7 @@ return new class extends Migration
             $table->enum('type', ['order', 'promotion', 'system', 'review', 'message']);
             $table->string('title', 255);
             $table->text('content');
-            $table->boolean('is_read')->default(false);
+            $table->timestamp('read_at')->nullable();
             $table->string('link', 500)->nullable();
             $table->dateTime('expired_date')->nullable();
             $table->timestamps();
