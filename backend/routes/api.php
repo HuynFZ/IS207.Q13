@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\OrderController;
@@ -12,27 +11,68 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\SearchController;
-
-// Public routes
+use App\Http\Controllers\ReviewController ;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SellerReviewController;
+// --- PUBLIC ROUTES (Ai cũng xem được) ---
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
-// Category Public
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-Route::get('/categories/{id}/subcategories', [CategoryController::class, 'subcategories']);
-
-// Search & Filter Public
-Route::get('/products', [ProductController::class, 'index']); // API 1
-Route::get('/products/{id}', [ProductController::class, 'show']); // API 2
+// Xem sản phẩm & Search
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/search', [SearchController::class, 'search']);
-Route::get('/products-trending', [SearchController::class, 'trending']); // Alias for logic separation
-Route::get('/products-newest', [SearchController::class, 'newest']);
-Route::get('/products-recommended', [SearchController::class, 'recommended']);
-Route::get('/products/seller/{sellerId}', [ProductController::class, 'getSellerProducts']); // API 10
+// ... (Giữ nguyên các route public khác) ...
 
-// Protected Routes (Cần Token)
-Route::middleware('auth:api')->group(function () {
+// Xem Review (Chỉ có GET là Public)
+Route::get('/products/{id}/reviews', [ReviewController::class, 'index']);
+Route::get('/products/{id}/reviews/stats', [ReviewController::class, 'stats']);
+Route::get('/sellers/{id}/reviews', [SellerReviewController::class, 'index']);
+
+
+// --- PROTECTED ROUTES (Phải đăng nhập) ---
+Route::middleware('auth:sanctum')->group(function () {
+
+    // Auth
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/me', [AuthController::class, 'me']);
+
+    // MESSAGING
+    Route::get('/messages', [MessageController::class, 'index']);
+    Route::post('/messages', [MessageController::class, 'store']);
+    Route::get('/messages/users/{userId}', [MessageController::class, 'show']);
+    Route::put('/messages/{id}/read', [MessageController::class, 'markAsRead']);
+    Route::get('/messages/unread-count', [MessageController::class, 'unreadCount']);
+
+    // PRODUCT REVIEWS (Viết/Sửa/Xóa phải ở đây)
+    Route::post('/products/{id}/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+
+    // SELLER REVIEWS
+    Route::post('/sellers/{id}/reviews', [SellerReviewController::class, 'store']);
+    Route::put('/seller-reviews/{id}', [SellerReviewController::class, 'update']);
+
+    // USER PROFILE
+    Route::get('/user/profile', [UserProfileController::class, 'show']);
+    Route::put('/user/profile', [UserProfileController::class, 'update']);
+    Route::post('/user/change-password', [UserProfileController::class, 'changePassword']);
+    Route::post('/user/change-avatar', [UserProfileController::class, 'changeAvatar']);
+
+    // NOTIFICATION
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::put('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    // --- PRODUCT REVIEWS (Auth) ---
+    Route::post('/products/{id}/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [\App\Http\Controllers\ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+
+    // --- SELLER REVIEWS (Auth) ---
+    Route::post('/sellers/{id}/reviews', [SellerReviewController::class, 'store']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
