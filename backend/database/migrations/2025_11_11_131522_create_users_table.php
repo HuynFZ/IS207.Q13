@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('phone_number', 15)->unique()->nullable();
             $table->text('address')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->string('avatar')->nullable();
             $table->enum('status', ['active', 'inactive', 'banned', 'suspended'])->default('active');
             $table->enum('role', ['customer', 'seller', 'admin'])->default('customer');
             $table->rememberToken();

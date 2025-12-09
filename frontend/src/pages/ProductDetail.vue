@@ -26,6 +26,7 @@
             <button class="thumb-nav-next">&gt;</button>
           </div>
         </section>
+
         <section class="product-info">
           <h1>{{ product?.name }}</h1>
           <p class="description">{{ product?.description }}</p>
@@ -61,11 +62,16 @@
               <span class="range-label-max">{{ product.marketPrice.max }}</span>
             </div>
           </div>
+
           <div class="action-buttons">
-            <button class="btn-chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Chat</button>
+            <button class="btn-chat" @click="handleChat">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Chat
+            </button>
             <button class="btn-add-cart">Thêm vào giỏ hàng</button>
             <button class="btn-buy-now">Đặt hàng</button>
           </div>
+
           <div class="seller-info">
             <img :src="product?.seller.avatar" :alt="product?.seller.name" class="seller-avatar">
             <div class="seller-details">
@@ -110,7 +116,7 @@
 
       <section class="related-listings-card" id="seller-listings">
         <h2>Tin khác của {{ product?.seller.name }}</h2>
-        <div class="grid-product-list">
+        <div class="horizontal-product-list">
           <ProductCard
               v-for="item in visibleSellerListings"
               :key="item.id"
@@ -143,17 +149,18 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
-// import axios from 'axios';
-import Header from '../components/Header-HomePage.vue';
+import { useRoute, useRouter } from 'vue-router'; // Import useRouter
+import Header from "../components/Header-Other.vue";
 import Footer from "../components/Footer.vue";
 import CommentSection from '../components/CommentSection.vue';
 import ProductCard from '../components/Product/ProductCard_NoReceive.vue';
 
 const route = useRoute();
+const router = useRouter(); // Khởi tạo router
 const product = ref(null);
 const loading = ref(true);
-// (Tất cả state logic cho "Xem thêm" giữ nguyên)
+
+// State "Xem thêm"
 const sellerListings = ref([]);
 const similarListings = ref([]);
 const visibleSellerCount = ref(4);
@@ -165,7 +172,6 @@ const hasMoreSimilar = computed(() => visibleSimilarCount.value < similarListing
 const loadMoreSeller = () => { visibleSellerCount.value += 4; };
 const loadMoreSimilar = () => { visibleSimilarCount.value += 8; };
 
-// (Logic cho gallery ảnh giữ nguyên)
 const currentImageIndex = ref(0);
 const currentImage = computed(() => {
   if (product.value && product.value.images && product.value.images.length > 0) {
@@ -177,7 +183,6 @@ const nextImage = () => { if (product.value) currentImageIndex.value = (currentI
 const prevImage = () => { if (product.value) currentImageIndex.value = (currentImageIndex.value - 1 + product.value.images.length) % product.value.images.length; };
 const selectImage = (index) => { currentImageIndex.value = index; };
 
-// Watcher: Tải lại data khi URL thay đổi
 watch(() => route.params.id, (newId) => {
   if (newId) {
     fetchProductDetail();
@@ -185,11 +190,25 @@ watch(() => route.params.id, (newId) => {
   }
 });
 
-// Logic lấy dữ liệu
+// === HÀM XỬ LÝ CHAT ===
+const handleChat = () => {
+  if (!product.value) return;
+  // Chuyển hướng sang trang chat và gửi kèm thông tin
+  router.push({
+    path: '/chat',
+    query: {
+      sellerId: product.value.seller.id,
+      sellerName: product.value.seller.name,
+      sellerAvatar: product.value.seller.avatar,
+      productName: product.value.name
+    }
+  });
+};
+
 const fetchProductDetail = async () => {
   loading.value = true;
-  visibleSellerCount.value = 4; // Reset
-  visibleSimilarCount.value = 8; // Reset
+  visibleSellerCount.value = 4;
+  visibleSimilarCount.value = 8;
 
   const productId = route.params.id;
   try {
@@ -197,7 +216,7 @@ const fetchProductDetail = async () => {
     product.value = {
       id: productId,
       name: 'iPhone 17 Promax 512GB',
-      description: 'Mô tả ngắn gọn về sản phẩm, tình trạng máy...',
+      description: 'Mô tả ngắn gọn về sản phẩm...',
       price: '25.000.000',
       tags: ['Tag 1', 'Tag 2'],
       location: 'Quận 1, TP. HCM',
@@ -210,22 +229,13 @@ const fetchProductDetail = async () => {
       comments: [{ id: 1, author: 'Nguyen Van A', avatar: 'https://via.placeholder.com/40/FFD60A/333333?text=A', text: 'Bình luận...', timestamp: '2 tháng trước' }, { id: 2, author: 'Nguyen Van B', avatar: 'https://via.placeholder.com/40/007BFF/FFFFFF?text=B', text: 'Sản phẩm tốt!', timestamp: '2 tháng trước' }]
     };
 
-    // Tải TẤT CẢ "Tin khác" (Mock 10 tin)
+    // Fake data cho Tin khác
     sellerListings.value = Array.from({ length: 10 }, (_, i) => ({
-      id: 100 + i + 1,
-      title: `Tin khác ${i + 1}`,
-      price: `${i + 1}.000.000 đ`,
-      location: 'Tp Hồ Chí Minh',
-      imageUrl: `https://via.placeholder.com/200/eeeeee/cccccc?text=Seller+${i + 1}`
+      id: 100 + i + 1, title: `Tin khác ${i + 1}`, price: `${i + 1}.000.000 đ`, location: 'Tp Hồ Chí Minh', imageUrl: `https://via.placeholder.com/200/eeeeee/cccccc?text=Seller+${i + 1}`
     }));
-
-    // Tải TẤT CẢ "Tin tương tự" (Mock 20 tin)
+    // Fake data cho Tin tương tự
     similarListings.value = Array.from({ length: 20 }, (_, i) => ({
-      id: 200 + i + 1,
-      title: `Tin tương tự ${i + 1}`,
-      price: `${i + 5}.000.000 đ`,
-      location: 'Tp Hồ Chí Minh',
-      imageUrl: `https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+${i + 1}`
+      id: 200 + i + 1, title: `Tin tương tự ${i + 1}`, price: `${i + 5}.000.000 đ`, location: 'Tp Hồ Chí Minh', imageUrl: `https://via.placeholder.com/200/eeeeee/cccccc?text=Similar+${i + 1}`
     }));
 
   } catch (error) { console.error(error); }
@@ -235,7 +245,6 @@ onMounted(() => { fetchProductDetail(); });
 </script>
 
 <style scoped>
-/* (CSS cho Gallery, Info, Khoảng giá, Nút... giữ nguyên) */
 .product-detail-page { background-color: #f4f4f4; padding-bottom: 30px; }
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
 .breadcrumbs { font-size: 0.9rem; color: #555; padding: 20px 0; }
@@ -283,93 +292,29 @@ onMounted(() => { fetchProductDetail(); });
 .btn-quick-message { background: #f5f5f5; border: 1px solid #ddd; padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; }
 .btn-quick-message-nav { width: 30px; height: 30px; border-radius: 50%; border: none; background: #eee; cursor: pointer; }
 
-/*
- * === CSS CHO BỐ CỤC BÊN DƯỚI (ĐÃ SỬA) ===
- */
-.product-info-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  margin-top: 30px;
-}
-@media (max-width: 992px) {
-  .product-info-layout {
-    grid-template-columns: 1fr;
-  }
-}
-.bottom-left-column {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-.bottom-right-column {
-  display: flex;
-  flex-direction: column;
-}
-.bottom-card {
-  background-color: #ffffff;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.bottom-card h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
+.product-info-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-top: 30px; }
+@media (max-width: 992px) { .product-info-layout { grid-template-columns: 1fr; } }
+.bottom-left-column { display: flex; flex-direction: column; gap: 30px; }
+.bottom-right-column { display: flex; flex-direction: column; }
+.bottom-card { background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+.bottom-card h2 { font-size: 1.5rem; font-weight: bold; margin-top: 0; margin-bottom: 20px; }
 .specs-list { list-style: none; padding: 0; margin: 0; }
 .specs-list li { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
 .specs-list li:last-child { border-bottom: none; }
-.spec-label { color: #555; }
-.spec-value { font-weight: 500; }
+.spec-label { color: #555; } .spec-value { font-weight: 500; }
 
-.related-listings-card {
-  background-color: #ffffff;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  margin-top: 30px;
-}
-.related-listings-card h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
+.related-listings-card { background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); overflow: hidden; margin-top: 30px; }
+.related-listings-card h2 { font-size: 1.5rem; font-weight: bold; margin-top: 0; margin-bottom: 20px; }
 
-/*
- * === CSS ĐÃ SỬA: SỬ DỤNG GRID CHO CẢ HAI ===
- */
+/* "Tin khác" (Cuộn ngang) */
+.horizontal-product-list { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; margin: 0 -24px; padding-left: 24px; padding-right: 24px; }
+.horizontal-product-list :deep(.product-card) { width: 220px; flex-shrink: 0; }
+.horizontal-product-list :deep(a) { flex-shrink: 0; }
 
-/* "Tin khác" (Bây giờ là Grid) */
-.horizontal-product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
-}
+/* "Tin tương tự" (Lưới) */
+.grid-product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+.grid-product-list :deep(.product-card) { width: auto; flex-shrink: 1; }
 
-/* "Tin tương tự" (Grid) */
-.grid-product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
-}
-
-.see-more-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  border: 1px solid #007bff;
-  color: #007bff;
-  background: #fff;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.see-more-btn:hover {
-  background-color: #f0f8ff;
-}
+.see-more-btn { display: block; width: 100%; padding: 12px; margin-top: 20px; border: 1px solid #007bff; color: #007bff; background: #fff; border-radius: 6px; font-weight: bold; cursor: pointer; }
+.see-more-btn:hover { background-color: #f0f8ff; }
 </style>

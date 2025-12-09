@@ -4,42 +4,55 @@
       <a
           v-for="category in categories"
           :key="category.id"
-          :href="category.url"
+          href="#"
           class="category-item"
+          @click.prevent
       >
         <span v-if="category.isNew" class="new-badge">Mới</span>
 
-        <img :src="category.imageUrl" :alt="category.name" class="category-icon" />
+        <div class="icon-wrapper">
+          <img
+              v-if="category.image"
+              :src="getImageUrl(category.image)"
+              :alt="category.name"
+              class="category-icon"
+          />
+          <div v-else class="placeholder-icon"></div>
+        </div>
 
         <span class="category-name" v-html="category.name"></span>
       </a>
     </div>
-
   </section>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
+// Hàm helper để lấy đường dẫn ảnh từ thư mục public/DanhMuc
+const getImageUrl = (imageName) => {
+  return `/DanhMuc/${imageName}`;
+};
+
+// Dữ liệu danh mục (Đã cập nhật tên file ảnh theo cấu trúc thư mục của bạn)
 const categories = ref([
   // Hàng 1
-  { id: 1, name: 'Bất động sản', imageUrl: '/images/categories/bds.png', url: '#', isNew: false },
-  { id: 2, name: 'Xe cộ', imageUrl: '/images/categories/xeco.png', url: '#', isNew: false },
-  { id: 3, name: 'Thú cưng', imageUrl: '/images/categories/thucung.png', url: '#', isNew: false },
-  { id: 4, name: 'Đồ gia dụng, nội<br>thất, cây cảnh', imageUrl: '/images/categories/dogiadung.png', url: '#', isNew: false },
-  { id: 5, name: 'Giải trí, Thể thao, Sở<br>thích', imageUrl: '/images/categories/giaitri.png', url: '#', isNew: false },
-  { id: 6, name: 'Mẹ và bé', imageUrl: '/images/categories/mevabe.png', url: '#', isNew: false },
-  { id: 7, name: 'Dịch vụ, Du lịch', imageUrl: '/images/categories/dichvu.png', url: '#', isNew: false },
-  { id: 8, name: 'Cho tặng miễn phí', imageUrl: '/images/categories/chotang.png', url: '#', isNew: false },
+  { id: 2, name: 'Xe cộ', image: 'XeCo.png', isNew: false }, // Chưa có ảnh
+  { id: 3, name: 'Thú cưng', image: 'ThuCung.webp', isNew: false },
+  { id: 4, name: 'Đồ gia dụng, nội<br>thất, cây cảnh', image: 'DoGiaDung.webp', isNew: false },
+  { id: 5, name: 'Giải trí, Thể thao, Sở<br>thích', image: 'GiaiTri.webp', isNew: false },
+  { id: 6, name: 'Mẹ và bé', image: 'MeBe.webp', isNew: false },
+  { id: 7, name: 'Dịch vụ, Du lịch', image: 'DuLich.webp', isNew: false },
+  { id: 8, name: 'Cho tặng miễn phí', image: 'QuaTang.webp', isNew: false },
+
   // Hàng 2
-  { id: 9, name: 'Việc làm', imageUrl: '/images/categories/vieclam.png', url: '#', isNew: false },
-  { id: 10, name: 'Đồ điện tử', imageUrl: '/images/categories/dientu.png', url: '#', isNew: false },
-  { id: 11, name: 'Tủ lạnh, máy lạnh,<br>máy giặt', imageUrl: '/images/categories/tulanh.png', url: '#', isNew: false },
-  { id: 12, name: 'Đồ dùng văn phòng,<br>công nông nghiệp', imageUrl: '/images/categories/vanphong.png', url: '#', isNew: false },
-  { id: 13, name: 'Thời trang, Đồ dùng<br>cá nhân', imageUrl: '/images/categories/thoitrang.png', url: '#', isNew: false },
-  { id: 14, name: 'Đồ ăn, thực phẩm<br>và các loại khác', imageUrl: '/images/categories/doan.png', url: '#', isNew: false },
-  { id: 15, name: 'Dịch vụ chăm sóc<br>nhà cửa', imageUrl: '/images/categories/dichvunha.png', url: '#', 'isNew': true },
-  { id: 16, name: 'Tất cả danh mục', imageUrl: '/images/categories/tatca.png', url: '#', isNew: false },
+  { id: 10, name: 'Đồ điện tử', image: 'DoDienTu.webp', isNew: false },
+  { id: 11, name: 'Tủ lạnh, máy lạnh,<br>máy giặt', image: 'TuLanh.webp', isNew: false }, // Dùng tạm icon điện tử
+  { id: 12, name: 'Đồ dùng văn phòng,<br>công nông nghiệp', image: 'MayIn.webp', isNew: false },
+  { id: 13, name: 'Thời trang, Đồ dùng<br>cá nhân', image: 'Thoitrang.webp', isNew: false },
+  { id: 14, name: 'Đồ ăn, thực phẩm<br>và các loại khác', image: 'DoAn.webp', isNew: false },
+  { id: 15, name: 'Dịch vụ chăm sóc<br>nhà cửa', image: 'NoiThat.webp', isNew: true }, // Có badge Mới
+  { id: 16, name: 'Tất cả danh mục', image: 'tat-ca-danh-muc.webp', isNew: false },
 ]);
 </script>
 
@@ -56,16 +69,16 @@ const categories = ref([
 }
 
 /*
- * Lưới chứa các danh mục
+ * Lưới chứa các danh mục (8 cột)
  */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 15px;
+  gap: 20px 10px; /* Gap dọc 20px, ngang 10px */
 }
 
 /*
- * Từng mục danh mục (icon + text)
+ * Từng mục danh mục
  */
 .category-item {
   display: flex;
@@ -79,33 +92,47 @@ const categories = ref([
   line-height: 1.4;
   position: relative;
   transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
 .category-item:hover {
   transform: translateY(-3px);
-  color: #007bff;
+  color: #ffd60a; /* Màu vàng thương hiệu khi hover */
 }
 
-/*
- * Icon danh mục
- */
-.category-icon {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
+/* Wrapper để giữ kích thước icon ổn định */
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.placeholder-icon {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+  border-radius: 50%;
 }
 
 /*
  * Tên danh mục
  */
 .category-name {
-  height: 38px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 2; /* Giới hạn 2 dòng */
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: 36px; /* Đảm bảo chiều cao đồng đều */
 }
 
 /*
@@ -113,19 +140,21 @@ const categories = ref([
  */
 .new-badge {
   position: absolute;
-  top: -5px;
-  right: 5px;
-  background-color: #f84343;
+  top: -8px;
+  right: 0;
+  background-color: #ff424e;
   color: white;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: bold;
   text-transform: uppercase;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 /*
- * PHẦN RESPONSIVE ĐẦY ĐỦ
+ * PHẦN RESPONSIVE
  */
 @media (max-width: 1200px) {
   .category-grid {
@@ -133,26 +162,26 @@ const categories = ref([
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .category-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  .category-icon {
-    width: 50px;
-    height: 50px;
-  }
-  .category-name {
-    font-size: 12px;
-  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .category-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px 5px;
   }
   .category-grid-section {
-    padding: 15px;
+    padding: 15px 10px;
+  }
+  .icon-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+  .category-name {
+    font-size: 11px;
   }
 }
 </style>

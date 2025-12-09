@@ -4,6 +4,8 @@ import Admin from '../pages/Admin.vue'
 import Login from '../pages/Login.vue'
 import Profile from '../pages/Profile.vue'
 import SocialProfile from '../pages/SocialProfile.vue'
+import EditProfile from '../pages/EditProfile.vue'
+import Favorites from '../pages/Favorites.vue'
 import Forgot from '../pages/Forgot.vue'
 import Register from '../pages/Register.vue'
 import ManageListings from '../pages/ManageListings.vue';
@@ -12,6 +14,7 @@ import ProductCatalog from '../pages/ProductCatalog.vue' // Trang Danh mục S�
 import OrderManagement from '../pages/OrderManagement.vue' // Trang Quản lý Đơn hàng
 import ProductDetail from '../pages/ProductDetail.vue';
 import Chat from '../pages/Chat.vue';
+import CreatePost from '../pages/CreatePost.vue';
 const routes = [
     {
         path: '/',
@@ -42,6 +45,16 @@ const routes = [
         path: '/profile/social',
         name: 'SocialProfile',
         component: SocialProfile
+    },
+    {
+        path: '/profile/edit',
+        name: 'EditProfile',
+        component: EditProfile
+    },
+    {
+        path: '/favorites',
+        name: 'Favorites',
+        component: Favorites
     },
     {
         path: '/forgot',
@@ -77,6 +90,11 @@ const routes = [
         path: '/manage-posts',
         name: 'ManageListings',
         component: ManageListings
+    },
+    {
+        path: '/post',
+        name: 'CreatePost',
+        component: CreatePost
     }
 ]
 
