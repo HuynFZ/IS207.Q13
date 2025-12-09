@@ -67,7 +67,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useAuth } from '../utils/useAuth';
-import Header from '../components/Header-HomePage.vue';
+import Header from '../components/Header-Other.vue';
 import Footer from '../components/Footer.vue';
 import ManageListingCard from '../components/Product/ManageListingCard.vue';
 
