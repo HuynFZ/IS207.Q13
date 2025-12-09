@@ -53,7 +53,7 @@
           Ra đời với sự thấu hiểu thói quen tiêu dùng của người Việt, VietMarket biến mỗi giao dịch thành một cuộc gặp gỡ. Đó là nơi bạn "pass" lại đam mê cho một người đồng điệu, giải phóng không gian sống, và góp phần tạo nên một vòng tuần hoàn ý nghĩa cho đồ vật.
           <br>
           Chúng tôi kết nối hàng triệu người Việt mỗi ngày — từ thành thị đến nông thôn — tạo nên một khu chợ số vừa quen thuộc như tiếng rao ngoài ngõ, vừa hiện đại và an toàn tuyệt đối</p>
-      </section>>
+      </section>
 
     </main>
     <Footer />
@@ -65,10 +65,10 @@ import { ref, onMounted } from 'vue';
 
 // --- COMPONENT IMPORTS ---
 import Header from '../components/Header-HomePage.vue';
-import Footer from '../components/Footer.vue';
 import CategoryGrid from '../components/CategoryGrid.vue';
 import ProductCard from '../components/Product/ProductCard_NoReceive.vue';
 import SearchFilterBar from '../components/SearchFilterBar.vue';
+import Footer from '../components/Footer.vue';
 
 // --- "DATABASE" GIẢ LẬP (KHÔI PHỤC DỮ LIỆU ĐẸP) ---
 const mockDB = [
