@@ -13,8 +13,18 @@
               v-for="category in categories"
               :key="category.id"
               @click="selectCategory(category)"
+              :class="{ selected: selectedCategory?.id === category.id }"
           >
-            <span v-html="category.name"></span>
+            <div class="category-content-left">
+              <img
+                  v-if="category.image"
+                  :src="getImageUrl(category.image)"
+                  alt="icon"
+                  class="cat-icon"
+              />
+              <span class="cat-name" v-html="category.name"></span>
+            </div>
+
             <div class="radio-button"></div>
           </li>
         </ul>
@@ -23,7 +33,7 @@
 
     <div class="search-input-wrapper">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type-="text" placeholder="Tìm sản phẩm..." />
+      <input type="text" placeholder="Tìm sản phẩm..." />
     </div>
 
     <div class="location-picker-wrapper">
@@ -42,7 +52,7 @@
               {{ province.name }}
             </option>
           </select>
-          <div v-if="provinces.length === 0">Đang tải tỉnh thành...</div>
+          <div v-if="provinces.length === 0" class="loading-text">Đang tải tỉnh thành...</div>
         </div>
         <div class="form-group">
           <label for="district">Chọn quận huyện*</label>
@@ -52,7 +62,7 @@
               {{ district.name }}
             </option>
           </select>
-          <div v-if="districts.length === 0 && selectedProvince">Đang tải quận huyện...</div>
+          <div v-if="districts.length === 0 && selectedProvince" class="loading-text">Đang tải quận huyện...</div>
         </div>
         <button class="modal-apply-btn" @click="applyLocation">Áp dụng</button>
       </div>
@@ -81,37 +91,44 @@ const selectCategory = (category) => {
   isCategoryModalOpen.value = false; // Đóng modal sau khi chọn
 };
 
+// === HÀM XỬ LÝ ẢNH ===
+const getImageUrl = (imageName) => {
+  // Trỏ thẳng vào thư mục public/DanhMuc
+  return `/DanhMuc/${imageName}`;
+};
+
 // Computed để hiển thị tên danh mục trên nút
 const categoryButtonText = computed(() => {
   if (selectedCategory.value) {
-    // Xóa thẻ <br> khỏi text
     return selectedCategory.value.name.replace(/<br>/g, ' ');
   }
   return 'Danh mục';
 });
 
-// Dữ liệu danh mục "có sẵn" (giống hệt CategoryGrid.vue)
+// === DỮ LIỆU DANH MỤC (ĐÃ CẬP NHẬT TÊN ẢNH) ===
 const categories = ref([
-  { id: 1, name: 'Bất động sản' },
-  { id: 2, name: 'Xe cộ' },
-  { id: 3, name: 'Thú cưng' },
-  { id: 4, name: 'Đồ gia dụng, nội<br>thất, cây cảnh' },
-  { id: 5, name: 'Giải trí, Thể thao, Sở<br>thích' },
-  { id: 6, name: 'Mẹ và bé' },
-  { id: 7, name: 'Dịch vụ, Du lịch' },
-  { id: 8, name: 'Cho tặng miễn phí' },
-  { id: 9, name: 'Việc làm' },
-  { id: 10, name: 'Đồ điện tử' },
-  { id: 11, name: 'Tủ lạnh, máy lạnh,<br>máy giặt' },
-  { id: 12, name: 'Đồ dùng văn phòng,<br>công nông nghiệp' },
-  { id: 13, name: 'Thời trang, Đồ dùng<br>cá nhân' },
-  { id: 14, name: 'Đồ ăn, thực phẩm<br>và các loại khác' },
-  { id: 15, name: 'Dịch vụ chăm sóc<br>nhà cửa' },
-  { id: 16, name: 'Tất cả danh mục' },
+  // Các mục chưa có ảnh trong folder bạn chụp, mình để trống ''
+  { id: 2, name: 'Xe cộ', image: 'XeCo.png' },
+  { id: 3, name: 'Thú cưng', image: 'ThuCung.webp' },
+
+  // Các mục có trong ảnh folder:
+  { id: 4, name: 'Đồ gia dụng, nội<br>thất, cây cảnh', image: 'DoGiaDung.webp' },
+  { id: 5, name: 'Giải trí, Thể thao, Sở<br>thích', image: 'GiaiTri.webp' },
+  { id: 6, name: 'Mẹ và bé', image: 'MeBe.webp' },
+  { id: 7, name: 'Dịch vụ, Du lịch', image: 'DuLich.webp' },
+  { id: 8, name: 'Cho tặng miễn phí', image: 'QuaTang.webp' },
+  { id: 9, name: 'Việc làm', image: '' },
+  { id: 10, name: 'Đồ điện tử', image: 'DoDienTu.webp' },
+  { id: 11, name: 'Tủ lạnh, máy lạnh,<br>máy giặt', image: 'TuLanh.webp' }, // Dùng tạm icon điện tử
+  { id: 12, name: 'Đồ dùng văn phòng,<br>công nông nghiệp', image: 'MayIn.webp' },
+  { id: 13, name: 'Thời trang, Đồ dùng<br>cá nhân', image: 'Thoitrang.webp' },
+  { id: 14, name: 'Đồ ăn, thực phẩm<br>và các loại khác', image: 'DoAn.webp' },
+  { id: 15, name: 'Dịch vụ chăm sóc<br>nhà cửa', image: 'NoiThat.webp' },
+  { id: 16, name: 'Tất cả danh mục', image: 'tat-ca-danh-muc.webp' },
 ]);
 
 
-// --- QUẢN LÝ MODAL KHU VỰC (Giữ nguyên) ---
+// --- QUẢN LÝ MODAL KHU VỰC (Giữ nguyên logic cũ) ---
 const isLocationModalOpen = ref(false);
 const provinces = ref([]);
 const districts = ref([]);
@@ -121,7 +138,7 @@ const savedLocationText = ref(null);
 
 const toggleLocationModal = () => {
   isLocationModalOpen.value = !isLocationModalOpen.value;
-  isCategoryModalOpen.value = false; // Đóng modal danh mục nếu đang mở
+  isCategoryModalOpen.value = false;
 };
 
 const selectedLocationText = computed(() => {
@@ -129,7 +146,6 @@ const selectedLocationText = computed(() => {
 });
 
 const fetchProvinces = async () => {
-  console.log("Đang dùng dữ liệu giả lập cho tỉnh thành...");
   try {
     await new Promise(r => setTimeout(r, 500));
     provinces.value = [
@@ -143,7 +159,6 @@ const fetchProvinces = async () => {
 
 const fetchDistricts = async (provinceId) => {
   if (!provinceId) return;
-  console.log(`Đang dùng dữ liệu giả lập cho quận/huyện của ${provinceId}`);
   districts.value = [];
   selectedDistrict.value = null;
   try {
@@ -188,19 +203,18 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
   gap: 12px;
+  position: relative;
 }
 
-/* * 2. Nút "Danh mục" (và Wrapper)
- * CSS MỚI CHO COMBO BOX
- */
+/* 2. Nút "Danh mục" */
 .category-picker-wrapper {
-  position: relative; /* Để định vị modal danh mục */
+  position: relative;
 }
 
 .category-dropdown {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Căn chỉnh text và icon */
+  justify-content: space-between;
   background: #ffffff;
   border: 2px solid #333;
   border-radius: 6px;
@@ -210,59 +224,89 @@ onMounted(() => {
   gap: 8px;
   padding: 8px 12px;
   white-space: nowrap;
-  width: 200px; /* Thêm chiều rộng cố định */
+  width: 200px;
 }
 .category-dropdown span {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* * CSS MỚI CHO MODAL DANH MỤC * */
+/* --- MODAL DANH MỤC --- */
 .category-modal {
   position: absolute;
-  top: calc(100% + 10px); /* Nằm dưới nút "Danh mục" */
+  top: calc(100% + 10px);
   left: 0;
-  width: 300px; /* Chiều rộng của dropdown */
+  width: 320px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  z-index: 100;
+  z-index: 1000;
   border: 1px solid #e0e0e0;
-  max-height: 400px; /* Chiều cao tối đa, có scroll */
+  max-height: 400px;
   overflow-y: auto;
 }
 
 .category-list {
   list-style: none;
-  padding: 8px;
+  padding: 0;
   margin: 0;
 }
+
 .category-list li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 10px;
+  padding: 12px 16px;
   cursor: pointer;
-  border-radius: 6px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background-color 0.2s;
 }
+
+.category-list li:last-child {
+  border-bottom: none;
+}
+
 .category-list li:hover {
-  background-color: #f5f5f5;
+  background-color: #f9f9f9;
 }
+
+/* Cụm chứa Ảnh và Tên danh mục */
+.category-content-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cat-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  /* border-radius: 4px; */
+}
+
+.cat-name {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Nút Radio */
 .radio-button {
   width: 18px;
   height: 18px;
   border-radius: 50%;
   border: 2px solid #ccc;
+  flex-shrink: 0;
 }
-/* Style khi một mục được chọn (tùy chọn) */
+
 .category-list li.selected .radio-button {
-  border-color: #007bff;
-  background-color: #007bff;
+  border-color: #ffd60a;
+  background-color: #ffd60a;
+  box-shadow: inset 0 0 0 3px white;
 }
-/* * KẾT THÚC CSS MỚI * */
 
 
-/* 3. Ô tìm kiếm sản phẩm */
+/* 3. Ô tìm kiếm */
 .search-input-wrapper {
   display: flex;
   align-items: center;
@@ -282,7 +326,7 @@ onMounted(() => {
   color: #aaa;
 }
 
-/* 4. Nút Chọn khu vực */
+/* 4. Nút Khu vực */
 .location-picker-wrapper {
   position: relative;
 }
@@ -300,7 +344,7 @@ onMounted(() => {
   white-space: nowrap;
 }
 
-/* 5. Nút "Tìm kiếm" màu vàng */
+/* 5. Nút Tìm kiếm */
 .search-button {
   background-color: #ffd60a;
   border: none;
@@ -311,7 +355,7 @@ onMounted(() => {
   cursor: pointer;
 }
 
-/* 6. Modal Chọn Khu Vực (Giữ nguyên) */
+/* 6. Modal Khu Vực */
 .location-modal {
   position: absolute;
   top: calc(100% + 10px);
@@ -321,7 +365,7 @@ onMounted(() => {
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   padding: 20px;
-  z-index: 100;
+  z-index: 1000;
   border: 1px solid #e0e0e0;
 }
 .modal-title {
@@ -347,6 +391,11 @@ onMounted(() => {
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #f9f9f9;
+}
+.loading-text {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
 }
 .modal-apply-btn {
   width: 100%;
